@@ -1,0 +1,16 @@
+Modificar	Eliminar	AUDISOALRE	AUTORIZACION DIRECTA SOL.DE RESGUARDO	Si	MANUMALD
+Modificar	Eliminar	ENVTRASOAC	Enviar a trámite sol. Alta/Act. BM	Si	MANUMALD
+Modificar	Eliminar	MODCONTUSR	Modificar Contraseña del Usuario	Si	MANUMALD
+Modificar	Eliminar	PERMACCABM	PERMITE ACTUALIZACION CATALOGO DE BIEN M	Si	MANUMALD
+Modificar	Eliminar	PERMACCEQC	Accesos trabajar con Equipo de Cómputo	Si	MANUMALD
+Modificar	Eliminar	PERMACCGEN	Permite trabajar con dato esp. General	Si	MANUMALD
+Modificar	Eliminar	PERMACCVEH	Permite trabajar con dato esp. Vehículo	Si	MANUMALD
+Modificar	Eliminar	PERMCANRES	Permite cancelar resguardos por transf.	Si	MANUMALD
+Modificar	Eliminar	PERMODFECT	FECHA DE TRABAJO	No	MANUMALD
+
+
+ENVTRASOAC
+
+KARALEAL LIKPSGTF
+CELEARAN  FDTHNBUA
+

@@ -1,0 +1,55 @@
+¿Qué hacer después de instalar ubuntu 16.10 y 16.04 LTS?
+
+1. Actualizar el sistema.
+
+sudo apt update
+sudo apt upgrade
+
+2. Instalar completamente el idioma ESPAÑOL
+
+En el DASH buscamos "Language Support" "Soporte de Idiomas" y seguimos los pasos que se muestran.
+
+3. instalar un reproductor de video (VLC)
+
+sudo apt install vlc
+
+4. Instalar un reproductor de audio (Audacious)
+
+sudo apt install audacious
+
+5. Instalar los restricted extras (codecs, flash, fuentes adicionales, drivers, etc)
+
+sudo apt install ubuntu-restricted-extras
+
+** Para poder ver algunos videos y ver contenido web flash en tu explorador web, es necesario instalar el plugin de Flash.
+
+sudo apt install flashplugin-installer
+
+6. Instalar chrome desde el paquete .deb // También puedes descargar Chromium (versión libre google Chrome)
+
+https://www.google.es/chrome/browser/...
+
+dpkg -i "Nombre del paquete .deb"
+
+sudo apt -f install  (si sale algún error después de querer instalar google chrome)
+
+7. Instalar gestores de compresión Ejemplo: .rar
+
+sudo apt-get install rar unace p7zip p7zip-full p7zip-rar unrar lzip lhasa arj sharutils mpack lzma lzop cabextract
+
+8. Instalar un lector pdf (Adobe Reader y Foxit Reader)
+
+
+ADOBE READER:
+Link de ayuda: https://planetadiego.com/2016/01/28/u...
+
+* Instalar Wine
+
+sudo wget -nc https://dl.winehq.org/wine-builds/Rel... && sudo apt-key add Release.key
+sudo apt-add-repository https://dl.winehq.org/wine-builds/ubu...
+sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubu... xenial main'
+sudo apt-get update
+sudo apt-get install --install-recommends winehq-stable
+
+Descargar el adobe reader (instalador windows)
+https://www.adobe.com/support/downloa...
