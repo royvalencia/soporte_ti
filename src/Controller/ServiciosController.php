@@ -94,6 +94,14 @@ class ServiciosController extends AppController
             'order' => array('CoUsers.nombre' => 'ASC')
         ))->toArray();
 
+        $usuarios = $this->Servicios->CoUsers->find('list', array(
+            'contain' => array('CoGroups'),
+            'conditions' => array(
+                'CoGroups.tipo' => 4
+            ),
+            'order' => array('CoUsers.nombre' => 'ASC')
+        ))->toArray();
+
         $status = $this->Servicios->Status->find('list');
         $tipoIncidencias = $this->Servicios->TipoIncidencias->find('list');
         $grupos = $this->Servicios->Grupos->find('list');
@@ -110,7 +118,7 @@ class ServiciosController extends AppController
         }
 
 
-        $this->set(compact('servicios', 'agentes', 'status', 'tipoIncidencias', 'grupos', 'tipo', 'coGroups'));
+        $this->set(compact('servicios', 'agentes', 'usuarios','status', 'tipoIncidencias', 'grupos', 'tipo', 'coGroups'));
     }
 
     /**
@@ -839,7 +847,10 @@ class ServiciosController extends AppController
             $argumentos = $session->read('argumentos' . $this->name);
             $this->request->data = $argumentos;    //Para los datos en el view
             if (!empty($argumentos['asunto'])) {
-                $conditions['Servicios.asunto like'] = $argumentos['asunto'] . '%';
+                $conditions['Servicios.asunto like'] = '%'.$argumentos['asunto'] . '%';
+            }
+            if (!empty($argumentos['descripcion'])) {
+                $conditions['Servicios.descripcion like'] = '%'.$argumentos['descripcion'] . '%';
             }
             /*if(!empty($argumentos['cat_adscripcione_id'])){
                $conditions['Servicios.cat_adscripcione_id']=$argumentos['cat_adscripcione_id'];
@@ -861,6 +872,12 @@ class ServiciosController extends AppController
             }
             if (!empty($argumentos['agente'])) {
                 $conditions['Servicios.agente'] = $argumentos['agente'];
+            }
+            if (!empty($argumentos['usuario'])) {
+                $conditions['Servicios.co_user_id'] = $argumentos['usuario'];
+            }
+            if (!empty($argumentos['referencia'])) {
+                $conditions['Servicios.referencia like'] = $argumentos['referencia'] . '%';
             }
         }
 

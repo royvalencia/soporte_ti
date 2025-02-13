@@ -78,12 +78,18 @@
                      echo $this->Form->input('folio', ['label' => false, 'placeholder' => 'Folio', 'required' => false]);
                      echo $this->Form->input('asunto', ['label' => false, 'placeholder' => 'Asunto', 'required' => false]);
 
+                     if ($tipo != 4) {
+                        echo $this->Form->input('descripcion', ['label' => false, 'placeholder' => 'Descripción', 'required' => false]);
+                     }
+
                      echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'empty' => ' - Estado -']);
                      if ($tipo != 4) {
                         echo $this->Form->input('tipo_incidencia_id', ['options' => $tipoIncidencias, 'label' => false, 'empty' => ' - Tipo -']);
                         echo $this->Form->input('grupo_id', ['options' => $grupos, 'label' => false, 'empty' => ' - Módulo -']);
                         echo $this->Form->input('co_group_id', ['label' => false, 'empty' => '- Grupo -', 'options' => $coGroups]);
                         echo $this->Form->input('agente', ['options' => $agentes, 'label' => false, 'empty' => ' - Agentes -']);
+                        echo $this->Form->input('usuario', ['options' => $usuarios, 'label' => false, 'empty' => ' - Usuarios -']);
+                        echo $this->Form->input('referencia', ['label' => false, 'placeholder' => 'Referencia', 'required' => false]);
                      }
 
 
