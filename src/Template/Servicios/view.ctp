@@ -25,6 +25,8 @@
         };
     });
 </script>
+<?php echo $this->Html->script('eModal.min'); //AJAX MODAL ?>
+<?php use Cake\Routing\Router; ?> 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2><?= __('Servicios') ?></h2>
@@ -79,7 +81,8 @@
                                     <?php echo date_format($servicio->created,"d-m-Y h:i A"); ?>
                                     <h5>
                                         <font color="blue">
-                                            <?= h($servicio->co_user->nombre) ?>
+                                        <a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>
+                                           
                                         </font>
                                     </h5>
                                 </div>
@@ -370,3 +373,25 @@
             agregarCampo();
         };
     </script>
+    <script type="text/javascript">
+function ajaxRequestDocumentos(id) 
+{      
+   
+    eModal.ajax(
+    {
+        method: "GET",
+        size: 'md',
+        url: "<?php echo Router::url(array('controller'=>'coUsers','action'=>'view_centro')) ?>"+"/"+id,
+        buttons: [                
+        { text: "Cerrar", close: true, style: "danger"}
+            ]
+    }, "Usuarios"
+    );
+}
+function hola() 
+{
+   alert("prueba");
+}
+
+
+</script>

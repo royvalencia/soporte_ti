@@ -1,7 +1,8 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
 <?php echo $this->Html->script('eModal.min'); //AJAX MODAL ?>
 <?php use Cake\Routing\Router; ?> 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+
 <script>
    setInterval(() => {
       $.ajax({
@@ -116,8 +117,8 @@
                                       <font size=4><strong><?php echo "#" . $this->Number->format($servicio->servicio_id); ?></strong></font>
                                       <font size=4><strong><?= h(strtoupper($servicio->asunto)) ? $this->Html->link(strtoupper($servicio->asunto), ['controller' => 'Servicios', 'action' => 'view', $servicio->servicio_id]) : '' ?></strong></font> <br>
                                       <medium class="text-muted">De: <font color="blue">
-                                      <!--<a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>-->
-                                      <?php echo h($servicio->co_user->nombre) ? $this->Html->link(h($servicio->co_user->nombre), ['controller' => 'CoUsers', 'action' => 'view_centro', $servicio->co_user_id]) : ''; ?>
+                                      <a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>
+                                      <?php //echo h($servicio->co_user->nombre) ? $this->Html->link(h($servicio->co_user->nombre), ['controller' => 'CoUsers', 'action' => 'view_centro', $servicio->co_user_id]) : ''; ?>
                                     </font> <?php if ($tipo!=4){ ?>Asignado a: <font color="green"><?= h($agentes[$servicio->agente]) ?></font> Módulo: <?= $servicio->grupo->descripcion ?> <?php }?> </medium> <br>
                                       <small class="text-muted">
                                           <?php echo date_format($servicio->created,"d-m-Y h:i A"); ?>
@@ -200,13 +201,11 @@
 function ajaxRequestDocumentos(id) 
 {      
    
-   alert(id);
-
     eModal.ajax(
     {
         method: "GET",
-        size: 'lg',
-        url: "<?php echo Router::url(array('controller'=>'coUsers','action'=>'view_centro')) ?>",
+        size: 'md',
+        url: "<?php echo Router::url(array('controller'=>'coUsers','action'=>'view_centro')) ?>"+"/"+id,
         buttons: [                
         { text: "Cerrar", close: true, style: "danger"}
             ]

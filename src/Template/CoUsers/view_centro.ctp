@@ -1,21 +1,4 @@
-<?php echo $this->Html->css('jasny-bootstrap.min.css'); ?>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
-<?php echo $this->Html->script('bootstrap-datepicker/bootstrap-datepicker');
-
-use Cake\Routing\Router; ?>
-<?php echo $this->Html->script('bootstrap-datepicker/bootstrap-datepicker.es'); ?>
-<?php echo $this->Html->css('main-datepicker'); ?>
-<?php echo $this->Html->script('eModal.min'); //AJAX MODAL 
-?>
-
-
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-
-                <div class="ibox-content">
 
                     <br>
     <!-- ****************************************** -->
@@ -80,22 +63,3 @@ use Cake\Routing\Router; ?>
 
 
 
-
-
-    </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Jasny -->
-<?php echo $this->Html->script('inspinia/plugins/jasny/jasny-bootstrap.min.js'); ?>
-
-<script type="text/javascript">
-    var dtp = $('.tipoFecha').datepicker({
-            language: 'es'
-        })
-        .on('changeDate', function(e) {
-            dtp.datepicker('hide');
-        });
-</script>

@@ -207,143 +207,154 @@ class ServiciosController extends AppController
             if ($_SERVER['CONTENT_LENGTH'] > 30 * 1024 * 1024) { // 30 MB
                 $this->Flash->error('El archivo excede el límite de tamaño permitido (30 MB).');
                 return $this->redirect(['action' => 'view/' . $id]);
-
             }
             if (isset($_POST['Responder'])) {
                 $comentario = $this->Comentarios->patchEntity($comentario, $this->request->getData());
-                $nuevosValores = array("servicio_id"=>$this->request->data['servicio_id'],"fecha_creacion"=>$this->request->data['fecha_creacion']);
-                
+                $nuevosValores = array("servicio_id" => $this->request->data['servicio_id'], "fecha_creacion" => $this->request->data['fecha_creacion']);
+
                 $actualizacion = $this->Servicios->get($this->request->data['servicio_id'], [
                     'contain' => []
                 ]);
                 $actualizacion = $this->Servicios->patchEntity($actualizacion, $nuevosValores);
-                
-                if ($result2 = $this->Comentarios->save($comentario)) {
-                    $result33 = $this->Servicios->save($actualizacion);
-                    //dd($result2);
-                    //---------------
-                    // Verificamos si se seleccionaron archivos
-                    //if (isset($_FILES['archivos']) && !empty($_FILES['archivos']['name'][0])) {
-                    $entro = 0;
-                    if (!empty($this->request->data['archivos'][0]['name'])) {
-                        $entro = 1;
-                        if (!is_dir('upload/archivos/' . $id)) {
-                            mkdir('upload/archivos/' . $id, 0777, true);
-                        }
 
-                        $archivosSubidos = $this->request->data['archivos'];
-                        $numArchivos = count($archivosSubidos) - 1;
+                /*$tamaniotexto = strlen($comentario->texto);
+                if ($tamaniotexto > 2147000000) {
+                    $this->Flash->error('No se guardó el servicio ya que las imagenes anexadas directamente en el texto sobrepasan el límite. Por favor Anexe sus Imagenes como adjuntos');
+                } else { */
 
-                        $archivosGuardados = [];
+                try {
 
-                        $cont = 0;
-                        // Iteramos sobre los archivos subidos
+                    if ($result2 = $this->Comentarios->save($comentario)) {
+                        $result33 = $this->Servicios->save($actualizacion);
+                        //dd($result2);
+                        //---------------
+                        // Verificamos si se seleccionaron archivos
+                        //if (isset($_FILES['archivos']) && !empty($_FILES['archivos']['name'][0])) {
+                        $entro = 0;
+                        if (!empty($this->request->data['archivos'][0]['name'])) {
+                            $entro = 1;
+                            if (!is_dir('upload/archivos/' . $id)) {
+                                mkdir('upload/archivos/' . $id, 0777, true);
+                            }
 
-                        for ($i = 0; $i < $numArchivos; $i++) {
-                            $nombreArchivo = $archivosSubidos[$i]['name'];
-                            $tmpArchivo = $archivosSubidos[$i]['tmp_name'];
-                            $errorArchivo = $archivosSubidos[$i]['error'];
+                            $archivosSubidos = $this->request->data['archivos'];
+                            $numArchivos = count($archivosSubidos) - 1;
 
-                            //$comentario_id='';
-                            //$comentario_id=$result2->comentario_id;
-                            //armamos los datos de los archivos para la DB
-                            $data[$cont] = [
-                                'servicio_id' => $id,
-                                'comentario_id' => $result2->comentario_id,
-                                'descripcion' => '',
-                                'archivo' => $nombreArchivo
-                            ];
+                            $archivosGuardados = [];
 
-                            $cont++;
+                            $cont = 0;
+                            // Iteramos sobre los archivos subidos
+
+                            for ($i = 0; $i < $numArchivos; $i++) {
+                                $nombreArchivo = $archivosSubidos[$i]['name'];
+                                $tmpArchivo = $archivosSubidos[$i]['tmp_name'];
+                                $errorArchivo = $archivosSubidos[$i]['error'];
+
+                                //$comentario_id='';
+                                //$comentario_id=$result2->comentario_id;
+                                //armamos los datos de los archivos para la DB
+                                $data[$cont] = [
+                                    'servicio_id' => $id,
+                                    'comentario_id' => $result2->comentario_id,
+                                    'descripcion' => '',
+                                    'archivo' => $nombreArchivo
+                                ];
+
+                                $cont++;
 
 
-                            if ($errorArchivo === 0) {
-                                $rutaDestino = 'upload/archivos/' . $id . '/' . basename($nombreArchivo);
+                                if ($errorArchivo === 0) {
+                                    $rutaDestino = 'upload/archivos/' . $id . '/' . basename($nombreArchivo);
 
-                                // Movemos el archivo al directorio de destino
-                                if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
-                                    $archivosGuardados[] = $rutaDestino;
+                                    // Movemos el archivo al directorio de destino
+                                    if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
+                                        $archivosGuardados[] = $rutaDestino;
+                                    } else {
+                                        echo "Error al mover el archivo $nombreArchivo.<br>";
+                                    }
                                 } else {
-                                    echo "Error al mover el archivo $nombreArchivo.<br>";
+                                    echo "Error al subir el archivo $nombreArchivo. Código de error: $errorArchivo.<br>";
                                 }
+                            }
+
+                            // Si se subieron archivos con éxito
+                            if (!empty($archivosGuardados)) {
+                                echo "Los siguientes archivos se subieron con éxito:<br>";
+                                foreach ($archivosGuardados as $archivo) {
+                                    echo "<a href='$archivo' target='_blank'>$archivo</a><br>";
+                                }
+                            }
+                        }
+
+
+                        $adjuntos = TableRegistry::get('adjuntos');
+
+                        if ($entro == 1) {
+                            $entidades = $adjuntos->newEntities($data);
+                            if ($result3 = $adjuntos->saveMany($entidades)) {
+                                //$this->Flash->success(__('The servicio has been saved.'));
+                                //return $this->redirect(['action' => 'view/' . $id]);
+                            };
+                        }
+
+                        if ($comentario->tipo == 1) { //Se envia correo si no es nota privada
+
+                            $registradoPorUsuario = $this->Servicios->CoUsers->get($servicio->co_user_id); // Obtener el usuario que registró el servicio
+                            $agentes = $this->Servicios->CoUsers->get($servicio->agente);
+                            $emailagente = $agentes->email;
+                            $nombreagente = $agentes->nombre;
+                            $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->id;
+
+                            if ($comentario->co_user_id == $registradoPorUsuario->co_user_id) {
+                                $email = new Email('default');
+                                $email->setTo($emailagente)
+                                    ->setSubject('Nuevo Comentario en la Incidencia')
+                                    ->setEmailFormat('html')
+                                    ->setTemplate('replyticket')
+                                    ->setViewVars([
+                                        'servicio' => $servicio,
+                                        'username' => $nombreagente,
+                                        'numeroServicio' => $servicio->servicio_id,
+                                        'comentario' => $this->request->getData('texto'),
+                                        'atendidoPor' => $nombreuser, // Nombre del usuario que respondió
+                                        'LinkTicket' => $LinkTicket
+                                    ]);
                             } else {
-                                echo "Error al subir el archivo $nombreArchivo. Código de error: $errorArchivo.<br>";
+                                $email = new Email('default');
+                                $email->setTo($registradoPorUsuario->email)
+                                    ->setSubject('Nuevo Comentario en su Incidencia')
+                                    ->setEmailFormat('html')
+                                    ->setTemplate('replyticket')
+                                    ->setViewVars([
+                                        'servicio' => $servicio,
+                                        'username' => $registradoPorUsuario->nombre,
+                                        'numeroServicio' => $servicio->servicio_id,
+                                        'comentario' => $this->request->getData('texto'),
+                                        'atendidoPor' => $nombreuser, // Nombre del usuario que respondió
+                                        'LinkTicket' => $LinkTicket
+                                    ]);
+                            }
+
+                            try {
+                                $email->send();
+                                $this->Flash->success('El correo de notificación se envió correctamente.');
+                            } catch (Exception $e) {
+                                $this->Flash->error('Error al enviar el correo de notificación: ' . $e->getMessage());
                             }
                         }
 
-                        // Si se subieron archivos con éxito
-                        if (!empty($archivosGuardados)) {
-                            echo "Los siguientes archivos se subieron con éxito:<br>";
-                            foreach ($archivosGuardados as $archivo) {
-                                echo "<a href='$archivo' target='_blank'>$archivo</a><br>";
-                            }
-                        }
+
+
+                        $this->Flash->success(__('El Comentario fué guardado con éxito.'));
+
+                        return $this->redirect(['action' => 'view/' . $id]);
                     }
-
-
-                    $adjuntos = TableRegistry::get('adjuntos');
-
-                    if ($entro == 1) {
-                        $entidades = $adjuntos->newEntities($data);
-                        if ($result3 = $adjuntos->saveMany($entidades)) {
-                            //$this->Flash->success(__('The servicio has been saved.'));
-                            //return $this->redirect(['action' => 'view/' . $id]);
-                        };
-                    }
-
-                    if ($comentario->tipo == 1) { //Se envia correo si no es nota privada
-
-                        $registradoPorUsuario = $this->Servicios->CoUsers->get($servicio->co_user_id); // Obtener el usuario que registró el servicio
-                        $agentes = $this->Servicios->CoUsers->get($servicio->agente);
-                        $emailagente = $agentes->email;
-                        $nombreagente = $agentes->nombre;
-                        $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->id;
-
-                        if ($comentario->co_user_id == $registradoPorUsuario->co_user_id) {
-                            $email = new Email('default');
-                            $email->setTo($emailagente)
-                                ->setSubject('Nuevo Comentario en la Incidencia')
-                                ->setEmailFormat('html')
-                                ->setTemplate('replyticket')
-                                ->setViewVars([
-                                    'servicio' => $servicio,
-                                    'username' => $nombreagente,
-                                    'numeroServicio' => $servicio->servicio_id,
-                                    'comentario' => $this->request->getData('texto'),
-                                    'atendidoPor' => $nombreuser, // Nombre del usuario que respondió
-                                    'LinkTicket' => $LinkTicket
-                                ]);
-                        } else {
-                            $email = new Email('default');
-                            $email->setTo($registradoPorUsuario->email)
-                                ->setSubject('Nuevo Comentario en su Incidencia')
-                                ->setEmailFormat('html')
-                                ->setTemplate('replyticket')
-                                ->setViewVars([
-                                    'servicio' => $servicio,
-                                    'username' => $registradoPorUsuario->nombre,
-                                    'numeroServicio' => $servicio->servicio_id,
-                                    'comentario' => $this->request->getData('texto'),
-                                    'atendidoPor' => $nombreuser, // Nombre del usuario que respondió
-                                    'LinkTicket' => $LinkTicket
-                                ]);
-                        }
-
-                        try {
-                            $email->send();
-                            $this->Flash->success('El correo de notificación se envió correctamente.');
-                        } catch (Exception $e) {
-                            $this->Flash->error('Error al enviar el correo de notificación: ' . $e->getMessage());
-                        }
-                    }
-
-
-
-                    $this->Flash->success(__('El Comentario fué guardado con éxito.'));
-
-                    return $this->redirect(['action' => 'view/' . $id]);
+                    $this->Flash->error(__('El Comentario NO fué guardado. Por favor, intente otra vez.'));
+                } catch (Exception $e) {
+                    $this->Flash->error('Error: las imagenes ingresadas en el area de texto exceden el limite permitido. favor de agregarlas como archivos adjuntos: ' . $e->getMessage());
                 }
-                $this->Flash->error(__('El Comentario NO fué guardado. Por favor, intente otra vez.'));
+
+                //}
             } elseif (isset($_POST['GuardarE'])) {
                 $servicio2 = $this->Servicios->patchEntity($servicio, $this->request->getData());
                 $agentenuevo = $this->request->data['agente'];
@@ -588,7 +599,7 @@ class ServiciosController extends AppController
             // Filtrado del asunto
             $asunto = $this->request->getData('asunto');
             //Listado de Palabras a Bloquear
-            $palabrasProhibidas = ['spam', 'phishing', 'virus','test','prueba','','sql','trojan','hack','malware','ataque'];
+            $palabrasProhibidas = ['spam', 'phishing', 'virus', 'test', 'prueba', '', 'sql', 'trojan', 'hack', 'malware', 'ataque'];
             if (in_array(strtolower($asunto), $palabrasProhibidas)) {
                 $this->Flash->error('Asunto no válido.');
                 return $this->redirect(['action' => 'add']);
@@ -965,7 +976,7 @@ class ServiciosController extends AppController
 
         $this->loadModel('CoGroups');
         $grupos2 = $this->CoGroups->find('all', ['conditions' => ['co_group_id' => $institucion]]);
-        $tipo=0;
+        $tipo = 0;
         foreach ($grupos2 as $grupo2) {
             $tipo = $grupo2->tipo;
             $padre = $grupo2->supervisor_padre;
@@ -1011,7 +1022,7 @@ class ServiciosController extends AppController
 
         $this->loadModel('CoGroups');
         $grupos2 = $this->CoGroups->find('all', ['conditions' => ['co_group_id' => $institucion]]);
-        $tipo=0;
+        $tipo = 0;
         foreach ($grupos2 as $grupo2) {
             $tipo = $grupo2->tipo;
             $padre = $grupo2->supervisor_padre;
@@ -1057,7 +1068,7 @@ class ServiciosController extends AppController
 
         $this->loadModel('CoGroups');
         $grupos2 = $this->CoGroups->find('all', ['conditions' => ['co_group_id' => $institucion]]);
-        $tipo=0;
+        $tipo = 0;
         foreach ($grupos2 as $grupo2) {
             $tipo = $grupo2->tipo;
             $padre = $grupo2->supervisor_padre;
