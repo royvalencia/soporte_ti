@@ -119,7 +119,7 @@
 
 
 
-              echo $this->Form->input('co_group_id', ['label' => 'Clasificación del Servicio', 'empty' => 'Seleccionar...', 'options' => $coGroups,'title'=>'Ej. Sistemas de información (Opergob, Pagina Web Sefiplan, Portal de Servidor Público, etc) - Ej. Soporte Técnico (Problemas de internet, mantenimiento de equipos, equipos no funcionan)']); ?>
+              echo $this->Form->input('co_group_id', ['label' => 'Clasificación del Servicio', 'empty' => 'Seleccionar...', 'options' => $coGroups,'title'=>'Ej. Sistemas de información (Opergob, Pagina Web Sefiplan, Portal de Servidor Público, etc) - Ej. Soporte Técnico (Problemas de internet, mantenimiento de equipos, equipos no funcionan)','required'=>'required']); ?>
               <div id="post1">
                 <?php
                 //echo $this->Form->input('grupo_id', array('label' => array('text' => 'Módulo'), 'options' => array('text' => 'Seleccionar...')));
@@ -135,7 +135,7 @@
             } else {
               echo $this->Form->input('statu_id', ['label' => 'Estado', 'options' => $status]);
               echo $this->Form->input('prioridade_id', ['label' => 'Prioridad', 'options' => $prioridades]);
-              echo $this->Form->input('co_group_id', ['label' => 'Grupo', 'empty' => 'Seleccionar...', 'options' => $coGroups]); ?>
+              echo $this->Form->input('co_group_id', ['label' => 'Grupo', 'empty' => 'Seleccionar...', 'options' => $coGroups, 'required'=>'required']); ?>
               <div id="post1">
                 <?php
                 //echo $this->Form->input('agente', ['options' => $agentes]);
