@@ -81,7 +81,15 @@
                                     <?php echo date_format($servicio->created,"d-m-Y h:i A"); ?>
                                     <h5>
                                         <font color="blue">
-                                        <a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>
+                                        
+                                        <?php 
+                                         if ($tipo != 4) { ?>
+                                            <a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>
+                                        <?php echo $this->Html->link('<i class="fa fa-pencil" ></i>', array('action' => 'edit',$servicio->servicio_id), array('class' => 'btn btn-default', 'rel' => 'tooltip', 'title' => 'Editar Solicitante', 'escape' => false)); 
+                                         } else {
+                                            echo h($servicio->co_user->nombre);
+                                         }
+                                        ?>
                                            
                                         </font>
                                     </h5>

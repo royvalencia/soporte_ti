@@ -791,7 +791,7 @@ class ServiciosController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $servicio = $this->Servicios->patchEntity($servicio, $this->request->getData());
             if ($this->Servicios->save($servicio)) {
-                $this->Flash->success(__('El Servicio fué guardado con éxito.'));
+                $this->Flash->success(__('El Servicio fué actualizado con éxito.'));
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -815,7 +815,15 @@ class ServiciosController extends AppController
             'order' => array('CoUsers.nombre' => 'ASC')
         ));
 
-        $this->set(compact('servicio', 'status', 'prioridades', 'tipoIncidencias', 'coGroups', 'dependencias', 'direcciones', 'solicitantes', 'grupos', 'coUsers', 'agentes'));
+        $usuarios = $this->Servicios->CoUsers->find('list', array(
+            'contain' => array('CoGroups'),
+            'conditions' => array(
+                'CoGroups.tipo IN' => array(4)
+            ),
+            'order' => array('CoUsers.nombre' => 'ASC')
+        ));
+
+        $this->set(compact('servicio', 'status', 'prioridades', 'tipoIncidencias', 'coGroups', 'dependencias', 'direcciones', 'solicitantes', 'grupos', 'coUsers', 'agentes','usuarios'));
     }
 
     /**

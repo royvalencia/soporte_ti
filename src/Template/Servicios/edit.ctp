@@ -47,21 +47,8 @@
             ?>
             
             <?php
-            echo $this->Form->input('statu_id', ['label' => 'Estado','options' => $status]);
-            echo $this->Form->input('prioridade_id', ['label' => 'Prioridad','options' => $prioridades]);
-            echo $this->Form->input('tipo_incidencia_id', ['options' => $tipoIncidencias]);
-            echo $this->Form->input('co_group_id', ['label' => 'Grupo','options' => $coGroups]);
-            echo $this->Form->input('agente', ['options' => $agentes]);
-            echo $this->Form->input('dependencia_id', ['options' => $dependencias]);
-            echo $this->Form->input('direccione_id', ['label' => 'Dirección','options' => $direcciones]);
-            echo $this->Form->input('solicitante_id', ['options' => $solicitantes]);
-            echo $this->Form->input('grupo_id', ['label' => 'Módulo','options' => $grupos]);
+            echo $this->Form->input('co_user_id', ['options' => $usuarios, 'label' => ['text' => 'Usuario'], 'empty' => ' - Usuario -','title' => 'Seleccione un usuario si desea crear un servicio a su nombre']);
             
-            
-            //echo $this->Form->hidden('fuente',['value'=>1]);
-            //echo $this->Form->hidden('fecha_creacion',['value'=>date("Y-m-d H:i:s")]);
-            //echo $this->Form->hidden('co_user_id', ['value'=>$user]);
-            //echo $this->Form->hidden('agente', ['options' => $agentes]);
             ?>
             <div class="form-group">
               <div class="col-sm-offset-3 col-sm-9">

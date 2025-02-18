@@ -123,7 +123,13 @@
                                       <font size=4><strong><?php echo "#" . $this->Number->format($servicio->servicio_id); ?></strong></font>
                                       <font size=4><strong><?= h(strtoupper($servicio->asunto)) ? $this->Html->link(strtoupper($servicio->asunto), ['controller' => 'Servicios', 'action' => 'view', $servicio->servicio_id]) : '' ?></strong></font> <br>
                                       <medium class="text-muted">De: <font color="blue">
+                                      <?php if ($tipo != 4) { ?>
                                       <a href="#" onclick="ajaxRequestDocumentos(<?=$servicio->co_user_id?>)"><?=$servicio->co_user->nombre?></a>
+                                      <?php } else {
+                                       echo h($servicio->co_user->nombre);
+                                      }
+                                       
+                                       ?>
                                       <?php //echo h($servicio->co_user->nombre) ? $this->Html->link(h($servicio->co_user->nombre), ['controller' => 'CoUsers', 'action' => 'view_centro', $servicio->co_user_id]) : ''; ?>
                                     </font> <?php if ($tipo!=4){ ?>Asignado a: <font color="green"><?= h($agentes[$servicio->agente]) ?></font> Módulo: <?= $servicio->grupo->descripcion ?> <?php }?> </medium> <br>
                                       <small class="text-muted">
