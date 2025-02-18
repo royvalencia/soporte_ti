@@ -61,7 +61,11 @@ class ServiciosController extends AppController
             ];
             $servicios = $this->paginate($this->Servicios);
         } elseif ($tipo == 3) {
-            $conditions['Servicios.co_group_id'] = $grupo;
+            $conditions=array (
+                'OR' => array(
+                    array('Servicios.co_user_id' => $user),
+                    array('Servicios.agente' => $user),
+                ));
             $this->paginate = [
                 'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
                 'order' => ['servicio_id DESC'],
@@ -173,7 +177,11 @@ class ServiciosController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
         } elseif ($tipo == 3) {
-            $conditions['Servicios.co_group_id'] = $grupo;
+            $conditions=array (
+                'OR' => array(
+                    array('Servicios.co_user_id' => $user),
+                    array('Servicios.agente' => $user),
+                ));
             try {
                 $servicio = $this->Servicios->get($id, [
                     'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
