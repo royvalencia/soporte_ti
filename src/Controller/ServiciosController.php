@@ -208,9 +208,9 @@ class ServiciosController extends AppController
         //$user = $this->Auth->User('co_user_id');
         //$grupo = $this->Auth->User('co_group_id');
 
-        //llamar a modelo Comentarios
+        //llamar a modelo Adjuntos
         $this->loadModel('Adjuntos');
-        $adjuntos = $this->Adjuntos->find('all', ['conditions' => ['Adjuntos.servicio_id' => $id]]);
+        $adjuntos = $this->Adjuntos->find('all', ['conditions' => ['Adjuntos.servicio_id' => $id,'Adjuntos.archivo !='=>""]]);
 
 
         //llamar a modelo Comentarios
