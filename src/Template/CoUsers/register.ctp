@@ -21,18 +21,32 @@
                 aria-label="Nombre"
             />
         </div>
-        <div class="form-group">
-            <label class="col-sm-1 col-form-label">Teléfono</label>
-            <input
-                id="telefono"
-                name="telefono"
-                type="tel"
-                placeholder=" Ej. 01234567890 000-000-0000"
-                class="form-control"
-                required
-                pattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s\-\.]?\d{3}[\s\-\.]?\d{4}$"
-                aria-label="Telefono/Celular"
-            />
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label class="col-sm-1 col-form-label">Teléfono</label>
+                <input
+                    id="telefono"
+                    name="telefono"
+                    type="tel"
+                    placeholder=" Ej. 01234567890 000-000-0000"
+                    class="form-control"
+                    required
+                    pattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s\-\.]?\d{3}[\s\-\.]?\d{4}$"
+                    aria-label="Telefono/Celular"
+                />
+            </div>
+            <div class="col-sm-6">
+                <label class="col-sm-1 col-form-label">Extensión</label>
+                <input
+                    id="extension"
+                    name="extension"
+                    type="text"
+                    placeholder=" Ej. 123456"
+                    class="form-control"
+                    pattern="^[0-9]{1,6}$"
+                    aria-label="Extensión"
+                />
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-7 col-form-label">Correo Electrónico</label>
@@ -64,6 +78,28 @@
                 'class' => 'form-control',
                 'label' => false
             ]) ?>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-7 col-form-label">Ubicación Física</label>
+            <input
+                id="ubicacion_fisica"
+                name="ubicacion_fisica"
+                type="text"
+                placeholder="Ingrese su Ubicación Física"
+                class="form-control"
+                aria-label="Ubicación Física"
+            />
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 col-form-label">Edificio</label>
+            <input
+                id="edificio"
+                name="edificio"
+                type="text"
+                placeholder="Ingrese su Edificio"
+                class="form-control"
+                aria-label="Edificio"
+            />
         </div>
         <div class="form-group">
             <label class="col-sm-1 col-form-label">Contraseña</label>
