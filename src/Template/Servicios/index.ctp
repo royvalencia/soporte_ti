@@ -1,6 +1,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
 <?php echo $this->Html->script('eModal.min'); //AJAX MODAL ?>
-<?php use Cake\Routing\Router; ?> 
+<?php use Cake\Routing\Router; 
+ echo $this->Html->css('inspinia/plugins/multiselect/bootstrap-multiselect');
+ echo $this->Html->script('inspinia/plugins/multiselect/bootstrap-multiselect', array('inline' => true));      
+?> 
 
 
 <script>
@@ -70,8 +73,7 @@
                         'inputContainer' => '<div class="form-group container-inline {{type}}{{required}}">{{content}}</div>',
                         'input' => '<input type="{{type}}" name="{{name}}" class="form-control input-sm" {{attrs}}/>',
                         'select' => ' <select name="{{name}}"{{attrs}} class="form-control input-sm">{{content}}</select>',
-                        'label' => '<label  {{attrs}}>{{text}}</label>',
-
+                        'label' => '<label  {{attrs}}>{{text}}</label>'
                      ];
                      $this->Form->templates($myTemplates);
                      echo $this->Form->create(null, ['url' => ['action' => 'buscar']]);
@@ -82,7 +84,7 @@
                         echo $this->Form->input('descripcion', ['label' => false, 'placeholder' => 'Descripción', 'required' => false]);
                      }
 
-                     echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'empty' => ' - Estado -']);
+                     echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'empty' => ' - Estado -', 'multiple'=>'true']);
                      if ($tipo != 4) {
                         echo $this->Form->input('tipo_incidencia_id', ['options' => $tipoIncidencias, 'label' => false, 'empty' => ' - Tipo -']);
                         echo $this->Form->input('grupo_id', ['options' => $grupos, 'label' => false, 'empty' => ' - Módulo -']);
@@ -229,5 +231,12 @@ function hola()
    alert("prueba");
 }
 
+$(document).ready(function() {
+        $('#statu-id').multiselect({           
+         nonSelectedText: 'Sin Selección',
+      allSelectedText: 'Todos Seleccionados',
+      nSelectedText: ' - Seleccionados'
+        });
+    });
 
 </script>

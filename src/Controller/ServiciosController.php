@@ -872,7 +872,7 @@ class ServiciosController extends AppController
                $conditions['Servicios.cat_adscripcione_id']=$argumentos['cat_adscripcione_id'];
            }*/
             if (!empty($argumentos['statu_id'])) {
-                $conditions['Servicios.statu_id'] = $argumentos['statu_id'];
+                $conditions['Servicios.statu_id IN'] = $argumentos['statu_id'];
             }
             if (!empty($argumentos['tipo_incidencia_id'])) {
                 $conditions['Servicios.tipo_incidencia_id'] = $argumentos['tipo_incidencia_id'];
