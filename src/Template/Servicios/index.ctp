@@ -84,7 +84,7 @@
                         echo $this->Form->input('descripcion', ['label' => false, 'placeholder' => 'Descripción', 'required' => false]);
                      }
 
-                     echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'empty' => ' - Estado -', 'multiple'=>'true']);
+                     echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'multiple'=>'true']);
                      if ($tipo != 4) {
                         echo $this->Form->input('tipo_incidencia_id', ['options' => $tipoIncidencias, 'label' => false, 'empty' => ' - Tipo -']);
                         echo $this->Form->input('grupo_id', ['options' => $grupos, 'label' => false, 'empty' => ' - Módulo -']);
@@ -233,7 +233,7 @@ function hola()
 
 $(document).ready(function() {
         $('#statu-id').multiselect({           
-         nonSelectedText: 'Sin Selección',
+         nonSelectedText: '- Estado -',
       allSelectedText: 'Todos Seleccionados',
       nSelectedText: ' - Seleccionados'
         });
