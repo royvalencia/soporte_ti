@@ -881,7 +881,7 @@ class ServiciosController extends AppController
                 $conditions['Servicios.servicio_id like'] = $argumentos['folio'] . '%';
             }
             if (!empty($argumentos['grupo_id'])) {
-                $conditions['Servicios.grupo_id'] = $argumentos['grupo_id'];
+                $conditions['Servicios.grupo_id IN'] = $argumentos['grupo_id'];
             }
             if (!empty($argumentos['co_group_id'])) {
                 $conditions['Servicios.co_group_id'] = $argumentos['co_group_id'];

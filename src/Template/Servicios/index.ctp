@@ -87,7 +87,7 @@
                      echo $this->Form->input('statu_id', ['options' => $status, 'label' => false, 'multiple'=>'true']);
                      if ($tipo != 4) {
                         echo $this->Form->input('tipo_incidencia_id', ['options' => $tipoIncidencias, 'label' => false, 'empty' => ' - Tipo -']);
-                        echo $this->Form->input('grupo_id', ['options' => $grupos, 'label' => false, 'empty' => ' - Módulo -']);
+                        echo $this->Form->input('grupo_id', ['options' => $grupos, 'label' => false, 'multiple'=>'true']);
                         echo $this->Form->input('co_group_id', ['label' => false, 'empty' => '- Grupo -', 'options' => $coGroups]);
                         echo $this->Form->input('agente', ['options' => $agentes, 'label' => false, 'empty' => ' - Agentes -']);
                         echo $this->Form->input('usuario', ['options' => $usuarios, 'label' => false, 'empty' => ' - Usuarios -']);
@@ -234,6 +234,13 @@ function hola()
 $(document).ready(function() {
         $('#statu-id').multiselect({           
          nonSelectedText: '- Estado -',
+      allSelectedText: 'Todos Seleccionados',
+      nSelectedText: ' - Seleccionados'
+        });
+    });
+$(document).ready(function() {
+        $('#grupo-id').multiselect({           
+         nonSelectedText: '- Módulo -',
       allSelectedText: 'Todos Seleccionados',
       nSelectedText: ' - Seleccionados'
         });
