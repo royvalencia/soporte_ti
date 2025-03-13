@@ -43,6 +43,7 @@
                     type="text"
                     placeholder=" Ej. 123456"
                     class="form-control"
+                    required
                     pattern="^[0-9]{1,6}$"
                     aria-label="Extensión"
                 />
@@ -68,7 +69,8 @@
                 'options' => $dependencias,
                 'empty' => 'Seleccione una dependencia',
                 'class' => 'form-control',
-                'label' => false
+                'label' => false,
+                'required' => true
             ]) ?>
         </div>
         <div class="form-group">
@@ -77,7 +79,8 @@
                 'options' => $direcciones,
                 'empty' => 'Seleccione una dirección',
                 'class' => 'form-control',
-                'label' => false
+                'label' => false,
+                'required' => true
             ]) ?>
         </div>
         <div class="form-group">
@@ -88,6 +91,7 @@
                 type="text"
                 placeholder="Ingrese su Ubicación Física"
                 class="form-control"
+                required
                 aria-label="Ubicación Física"
             />
         </div>
@@ -99,6 +103,7 @@
                 type="text"
                 placeholder="Ingrese su Edificio"
                 class="form-control"
+                required
                 aria-label="Edificio"
             />
         </div>
