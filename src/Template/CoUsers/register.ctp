@@ -43,6 +43,7 @@
                     type="text"
                     placeholder=" Ej. 123456"
                     class="form-control"
+                    required
                     pattern="^[0-9]{1,6}$"
                     aria-label="Extensión"
                 />
@@ -58,6 +59,7 @@
                 class="form-control"
                 required
                 aria-label="Correo Electrónico"
+                pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
             />
         </div>
 
@@ -67,7 +69,8 @@
                 'options' => $dependencias,
                 'empty' => 'Seleccione una dependencia',
                 'class' => 'form-control',
-                'label' => false
+                'label' => false,
+                'required' => true
             ]) ?>
         </div>
         <div class="form-group">
@@ -76,7 +79,8 @@
                 'options' => $direcciones,
                 'empty' => 'Seleccione una dirección',
                 'class' => 'form-control',
-                'label' => false
+                'label' => false,
+                'required' => true
             ]) ?>
         </div>
         <div class="form-group">
@@ -87,6 +91,7 @@
                 type="text"
                 placeholder="Ingrese su Ubicación Física"
                 class="form-control"
+                required
                 aria-label="Ubicación Física"
             />
         </div>
@@ -98,6 +103,7 @@
                 type="text"
                 placeholder="Ingrese su Edificio"
                 class="form-control"
+                required
                 aria-label="Edificio"
             />
         </div>

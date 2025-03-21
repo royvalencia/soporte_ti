@@ -22,10 +22,6 @@
                     <div class="">
                         <table class="table table-striped table-detalle" style="width: 100%;">
                             <tbody>
-
-
-
-
                                 <tr>
                                     <td class="field"><?= __('Nombre') ?></td>
                                     <td><?= h($coUser->nombre) ?></td>
@@ -45,6 +41,14 @@
                                 <tr>
                                     <td class="field"><?= __('Dirección') ?></td>
                                     <td><?= h($coUser->direccione->nombre) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="field"><?= __('Edificio') ?></td>
+                                    <td><?= h($coUser->edificio) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="field"><?= __('Ubicacion Fisica') ?></td>
+                                    <td><?= h($coUser->ubicacion_fisica) ?></td>
                                 </tr>
                                 <tr>
                                     <td class="field"><?= __('Ult. inicio de sesión') ?></td>

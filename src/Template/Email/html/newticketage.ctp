@@ -60,6 +60,9 @@
                 <p><?php echo $this->Html->div(null, $servicio->descripcion, ['escape' => false]); ?></p>
                 <br>
                 <a href="<?= h($LinkTicket) ?>" class="button">Ver el Ticket</a>
+                <p style="color: #999999; font-size: 15px; margin-top: 20px;" align="center">
+                    <u>Este es un correo informativo, por favor no responda a este mensaje.</u>
+                </p>
             </div>
             <div class="footer">
                 <p>Incidencias y Servicios. <br>&copy; <?= date('Y') ?>Todos los derechos reservados.</p>
