@@ -18,6 +18,7 @@
             placeholder="Contraseña"
             class="form-control"
             required
+            autocomplete="off"
             aria-label="Contraseña"
         />
         <i class="form-control-feedback fa fa-lock fa-lg"  aria-hidden="true" style="top:8px;color:#a5b4c8"></i>
