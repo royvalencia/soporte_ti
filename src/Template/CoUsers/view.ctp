@@ -48,7 +48,18 @@
                         <td class="field"><?= __('Nombre') ?></td>
                         <td><?= h($coUser->nombre) ?></td>
                     </tr>
-                    
+                    <tr>
+                        <td class="field"><?= __('Telefono') ?></td>
+                        <td><?= h($coUser->telefono) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="field"><?= __('Ubicacion Fisica') ?></td>
+                        <td><?= h($coUser->ubicacion_fisica) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="field"><?= __('Edificio') ?></td>
+                        <td><?= h($coUser->edificio) ?></td>
+                    </tr>
                     <tr>
                         <td class="field"><?= __('Grupo') ?></td>
                         <td><?= $coUser->has('co_group') ? $this->Html->link($coUser->co_group->name, ['controller' => 'CoGroups', 'action' => 'view', $coUser->co_group->co_group_id]) : '' ?></td>
@@ -60,7 +71,7 @@
                     </tr>
                     
                     <tr>
-                        <td class="field"><?= __('Ult. imicio de sesión') ?></td>
+                        <td class="field"><?= __('Ult. Inicio de sesión') ?></td>
                         <td><?= h($coUser->last_login) ?></td>
                     </tr>
                     <tr>

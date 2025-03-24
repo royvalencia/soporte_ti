@@ -49,7 +49,10 @@
             echo $this->Form->input('login');
             echo $this->Form->input('password',['required'=>false]);
             echo $this->Form->input('nombre');
-             echo $this->Form->input('email');
+            echo $this->Form->input('email');
+            echo $this->Form->input('telefono');
+            echo $this->Form->input('ubicacion_fisica');
+            echo $this->Form->input('edificio');
             echo $this->Form->input('co_group_id', ['options' => $coGroups,'label'=>'Grupo']);
             
 
