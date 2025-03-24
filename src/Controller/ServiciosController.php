@@ -52,7 +52,12 @@ class ServiciosController extends AppController
             foreach ($grupos3 as $grupo3) {
                 $grupoB[] = $grupo3->co_group_id;
             }
-            $conditions['Servicios.co_group_id IN'] = $grupoB;
+            //$conditions['Servicios.co_group_id IN'] = $grupoB;
+            $conditions=array (
+                'OR' => array(
+                    array('Servicios.co_user_id' => $user),
+                    array('Servicios.co_group_id IN' => $grupoB),
+                ));
             $this->paginate = [
                 'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
                 'order' => ['servicio_id DESC'],
@@ -166,7 +171,11 @@ class ServiciosController extends AppController
             foreach ($grupos3 as $grupo3) {
                 $grupoB[] = $grupo3->co_group_id;
             }
-            $conditions['Servicios.co_group_id IN'] = $grupoB;
+            $conditions=array (
+                'OR' => array(
+                    array('Servicios.co_user_id' => $user),
+                    array('Servicios.co_group_id IN' => $grupoB),
+                ));
             try {
                 $servicio = $this->Servicios->get($id, [
                     'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
