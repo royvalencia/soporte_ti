@@ -52,12 +52,16 @@ class ServiciosController extends AppController
             foreach ($grupos3 as $grupo3) {
                 $grupoB[] = $grupo3->co_group_id;
             }
-            //$conditions['Servicios.co_group_id IN'] = $grupoB;
-            $conditions=array (
+            $conditions2 = array(
+                array('Servicios.co_user_id' => $user),
+                array('Servicios.co_group_id IN' => $grupoB)
+            );
+            $conditions['OR'] = $conditions2;
+            /*$conditions=array (
                 'OR' => array(
                     array('Servicios.co_user_id' => $user),
                     array('Servicios.co_group_id IN' => $grupoB),
-                ));
+                ));*/
             $this->paginate = [
                 'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
                 'order' => ['servicio_id DESC'],
@@ -66,11 +70,13 @@ class ServiciosController extends AppController
             ];
             $servicios = $this->paginate($this->Servicios);
         } elseif ($tipo == 3) {
-            $conditions=array (
-                'OR' => array(
-                    array('Servicios.co_user_id' => $user),
-                    array('Servicios.agente' => $user),
-                ));
+            $conditions2 = array(
+                array('Servicios.co_user_id' => $user),
+                array('Servicios.agente' => $user)
+            );
+            $conditions['OR'] = $conditions2;
+
+
             $this->paginate = [
                 'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
                 'order' => ['servicio_id DESC'],
@@ -98,7 +104,7 @@ class ServiciosController extends AppController
         $agentes = $this->Servicios->CoUsers->find('list', array(
             'contain' => array('CoGroups'),
             'conditions' => array(
-                'CoGroups.tipo IN' => array(2, 3)
+                'CoGroups.tipo IN' => array(1, 2, 3)
             ),
             'order' => array('CoUsers.nombre' => 'ASC')
         ))->toArray();
@@ -127,7 +133,7 @@ class ServiciosController extends AppController
         }
 
 
-        $this->set(compact('servicios', 'agentes', 'usuarios','status', 'tipoIncidencias', 'grupos', 'tipo', 'coGroups'));
+        $this->set(compact('servicios', 'agentes', 'usuarios', 'status', 'tipoIncidencias', 'grupos', 'tipo', 'coGroups'));
     }
 
     /**
@@ -171,11 +177,11 @@ class ServiciosController extends AppController
             foreach ($grupos3 as $grupo3) {
                 $grupoB[] = $grupo3->co_group_id;
             }
-            $conditions=array (
-                'OR' => array(
-                    array('Servicios.co_user_id' => $user),
-                    array('Servicios.co_group_id IN' => $grupoB),
-                ));
+            $conditions2 = array(
+                array('Servicios.co_user_id' => $user),
+                array('Servicios.co_group_id IN' => $grupoB)
+            );
+            $conditions['OR'] = $conditions2;
             try {
                 $servicio = $this->Servicios->get($id, [
                     'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
@@ -186,11 +192,11 @@ class ServiciosController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
         } elseif ($tipo == 3) {
-            $conditions=array (
-                'OR' => array(
-                    array('Servicios.co_user_id' => $user),
-                    array('Servicios.agente' => $user),
-                ));
+            $conditions2 = array(
+                array('Servicios.co_user_id' => $user),
+                array('Servicios.agente' => $user)
+            );
+            $conditions['OR'] = $conditions2;
             try {
                 $servicio = $this->Servicios->get($id, [
                     'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
@@ -219,7 +225,7 @@ class ServiciosController extends AppController
 
         //llamar a modelo Adjuntos
         $this->loadModel('Adjuntos');
-        $adjuntos = $this->Adjuntos->find('all', ['conditions' => ['Adjuntos.servicio_id' => $id,'Adjuntos.archivo !='=>""]]);
+        $adjuntos = $this->Adjuntos->find('all', ['conditions' => ['Adjuntos.servicio_id' => $id, 'Adjuntos.archivo !=' => ""]]);
 
 
         //llamar a modelo Comentarios
@@ -446,7 +452,7 @@ class ServiciosController extends AppController
         $tipoIncidencias = $this->Servicios->TipoIncidencias->find('list', ['limit' => 200]);
         $coGroups = $this->Servicios->CoGroups->find('list', array(
             'conditions' => array(
-                'tipo IN' => array(2, 3)
+                'tipo IN' => array(1, 2, 3)
             ),
             'order' => array('name' => 'ASC')
         ));
@@ -752,7 +758,7 @@ class ServiciosController extends AppController
         } else {
             $coGroups = $this->Servicios->CoGroups->find('list', array(
                 'conditions' => array(
-                    'tipo IN' => array(2, 3)
+                    'tipo IN' => array(1, 2, 3)
                 ),
                 'order' => array('name' => 'ASC')
             ));
@@ -840,7 +846,7 @@ class ServiciosController extends AppController
             'order' => array('CoUsers.nombre' => 'ASC')
         ));
 
-        $this->set(compact('servicio', 'status', 'prioridades', 'tipoIncidencias', 'coGroups', 'dependencias', 'direcciones', 'solicitantes', 'grupos', 'coUsers', 'agentes','usuarios'));
+        $this->set(compact('servicio', 'status', 'prioridades', 'tipoIncidencias', 'coGroups', 'dependencias', 'direcciones', 'solicitantes', 'grupos', 'coUsers', 'agentes', 'usuarios'));
     }
 
     /**
@@ -872,10 +878,10 @@ class ServiciosController extends AppController
             $argumentos = $session->read('argumentos' . $this->name);
             $this->request->data = $argumentos;    //Para los datos en el view
             if (!empty($argumentos['asunto'])) {
-                $conditions['Servicios.asunto like'] = '%'.$argumentos['asunto'] . '%';
+                $conditions['Servicios.asunto like'] = '%' . $argumentos['asunto'] . '%';
             }
             if (!empty($argumentos['descripcion'])) {
-                $conditions['Servicios.descripcion like'] = '%'.$argumentos['descripcion'] . '%';
+                $conditions['Servicios.descripcion like'] = '%' . $argumentos['descripcion'] . '%';
             }
             /*if(!empty($argumentos['cat_adscripcione_id'])){
                $conditions['Servicios.cat_adscripcione_id']=$argumentos['cat_adscripcione_id'];

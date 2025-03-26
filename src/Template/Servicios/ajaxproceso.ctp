@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <?php if ($coGroup == 3) {
+    <?php if ($coGroup == 3 OR $coGroup == 1 OR $coGroup == 5) {
         echo '<input id="grupo-id" name="grupo_id" type="hidden" value="10"/>';
     } else { ?>
         <div class="form-group"><label for="grupo" class="col-sm-3 control-label">Módulo</label>

@@ -133,7 +133,7 @@
                                        
                                        ?>
                                       <?php //echo h($servicio->co_user->nombre) ? $this->Html->link(h($servicio->co_user->nombre), ['controller' => 'CoUsers', 'action' => 'view_centro', $servicio->co_user_id]) : ''; ?>
-                                    </font> <?php if ($tipo!=4){ ?>Asignado a: <font color="green"><?= h($agentes[$servicio->agente]) ?></font> Módulo: <?= $servicio->grupo->descripcion ?> <?php }?> </medium> <br>
+                                    </font> <?php if ($tipo!=4){ ?>Asignado a: <font color="green"><?= h($agentes[$servicio->agente]) ?></font> Módulo: <?= $servicio->grupo->descripcion ?> <?php if ($servicio->referencia){ ?> Ref: <?= $servicio->referencia ?> <?php } }?> </medium> <br>
                                       <small class="text-muted">
                                           <?php echo date_format($servicio->created,"d-m-Y h:i A"); ?>
                                           Creado hace <?php

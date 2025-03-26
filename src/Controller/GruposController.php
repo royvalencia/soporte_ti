@@ -75,7 +75,7 @@ class GruposController extends AppController
 
         $coGroups = $this->Grupos->CoGroups->find('list', array(
             'conditions' => array(
-                'tipo IN' => array(2)
+                'tipo IN' => array(1, 2)
             ),
             'order' => array('name' => 'ASC')
         ));
