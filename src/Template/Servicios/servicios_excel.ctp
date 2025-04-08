@@ -3,7 +3,7 @@
 <table cellpadding="0" cellspacing="0">
 
 
-    <?php $tableHeaders =  $this->Html->tableHeaders(array('Folio','Asunto','Estado','Prioridad','Fecha','Tipo','Grupo','Dependencia','Dirección','Modulo','Usuario','Agente','Referencia'));
+    <?php $tableHeaders =  $this->Html->tableHeaders(array('Folio','Asunto','Estado','Prioridad','Fecha Creación','Fecha Actualización','Tipo','Grupo','Dependencia','Dirección','Modulo','Usuario','Agente','Referencia'));
 echo '<thead>'.$tableHeaders.'</thead>'; ?>
 
 <?php
@@ -23,7 +23,8 @@ echo '<thead>'.$tableHeaders.'</thead>'; ?>
 		<td>
 			<?php echo $servicio->prioridade->descripcion; ?>
 		</td>
-		<td><?php echo $servicio->fecha_creacion; ?>&nbsp;</td>
+		<td><?php echo date_format($servicio->created, 'd-m-Y'); ?>&nbsp;</td>
+		<td><?php echo date_format($servicio->modified, 'd-m-Y'); ?>&nbsp;</td>
 		<td>
 			<?php echo $servicio->tipo_incidencia->descripcion; ?>
 		</td>
