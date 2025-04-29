@@ -209,6 +209,7 @@
     input.type = "file";
     input.title = "seleccione un archivo para complementar su solicitud";
     input.name = "archivos[]"; // Enviar los archivos como un arreglo
+    input.accept = 'application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv, .doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/*';
     input.addEventListener('change', agregarCampo); // Agregar el evento para agregar más campos
     contenedorArchivos.appendChild(input);
     contenedorArchivos.appendChild(document.createElement("br")); // Añadir salto de línea

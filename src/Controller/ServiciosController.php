@@ -6,6 +6,7 @@ use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 use Cake\Datasource\ConnectionManager;
+use DateTime;
 
 /**
  * Servicios Controller
@@ -27,6 +28,16 @@ class ServiciosController extends AppController
     {
         //Para evitar Cache
         $this->response->header('Cache-Control', 'no-cache');
+
+        // horas habiles
+        $fechaHoraActual = new DateTime();
+        $diasFestivos = ['2025-04-17', '2025-04-18', '2025-05-01', '2025-05-05', '2025-06-12', '2025-09-16', '2025-11-17'];
+        $fecha72HorasAtras = $this->restarHorasHabiles($fechaHoraActual, 72, $diasFestivos); //2025-04-15 16:11:58
+
+        $tablename = TableRegistry::get("Servicios");
+        $conditions = array('modified <' => $fecha72HorasAtras, 'statu_id' => 5);
+        $fields = array('statu_id' => 6);
+        $tablename->updateAll($fields, $conditions);
 
         $conditions = $this->getFiltro(); //Filtro de la consulta
 
@@ -295,13 +306,22 @@ class ServiciosController extends AppController
 
 
                                 if ($errorArchivo === 0) {
-                                    $rutaDestino = 'upload/archivos/' . $id . '/' . basename($nombreArchivo);
+                                    // Obtenemos la extensión del archivo
+                                    $ext = strtolower(pathinfo($nombreArchivo, PATHINFO_EXTENSION));
+                                    // Que Extensiones permitidas
+                                    $allowExtensions = ['jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'csv'];
+                                    //Validamos la extension del Archivo
+                                    if (in_array($ext, $allowExtensions)) {
+                                        $rutaDestino = 'upload/archivos/' . $id . '/' . basename($nombreArchivo);
 
-                                    // Movemos el archivo al directorio de destino
-                                    if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
-                                        $archivosGuardados[] = $rutaDestino;
-                                    } else {
-                                        echo "Error al mover el archivo $nombreArchivo.<br>";
+                                        // Movemos el archivo al directorio de destino
+                                        if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
+                                            $archivosGuardados[] = $rutaDestino;
+                                        } else {
+                                            echo "Error al mover el archivo $nombreArchivo.<br>";
+                                        }
+                                    }else {
+                                        $this->Flash->error('Extensión de archivo no válida.');
                                     }
                                 } else {
                                     echo "Error al subir el archivo $nombreArchivo. Código de error: $errorArchivo.<br>";
@@ -671,13 +691,24 @@ class ServiciosController extends AppController
 
 
                         if ($errorArchivo === 0) {
-                            $rutaDestino = 'upload/archivos/' . $result->servicio_id . '/' . basename($nombreArchivo);
 
-                            // Movemos el archivo al directorio de destino
-                            if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
-                                $archivosGuardados[] = $rutaDestino;
+                            // Obtenemos la extensión del archivo
+                            $ext = strtolower(pathinfo($nombreArchivo, PATHINFO_EXTENSION));
+                            // Que Extensiones permitidas
+                            $allowExtensions = ['jpg', 'jpeg', 'png', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'csv'];
+                            //Validamos la extension del Archivo
+                            if (in_array($ext, $allowExtensions)) {
+
+                                $rutaDestino = 'upload/archivos/' . $result->servicio_id . '/' . basename($nombreArchivo);
+
+                                // Movemos el archivo al directorio de destino
+                                if (move_uploaded_file($tmpArchivo, $rutaDestino)) {
+                                    $archivosGuardados[] = $rutaDestino;
+                                } else {
+                                    echo "Error al mover el archivo $nombreArchivo.<br>";
+                                }
                             } else {
-                                echo "Error al mover el archivo $nombreArchivo.<br>";
+                                $this->Flash->error('Extensión de archivo no válida.');
                             }
                         } else {
                             echo "Error al subir el archivo $nombreArchivo. Código de error: $errorArchivo.<br>";
@@ -1235,5 +1266,35 @@ class ServiciosController extends AppController
 
 
         //$this->set('servicios', $servicios);
+    }
+
+    function restarHorasHabiles($fechaHoraActual, $horasARestar, $diasFestivos = [])
+    {
+        // Convertimos a objeto DateTime
+        //$fecha = new DateTime($fechaHoraActual);
+        $fecha = $fechaHoraActual;
+
+        // Convertimos el array de festivos a formato Y-m-d para comparación
+        $festivos = array_map(function ($dia) {
+            return (new DateTime($dia))->format('Y-m-d');
+        }, $diasFestivos);
+
+        $horasRestadas = 0;
+
+        while ($horasRestadas < $horasARestar) {
+            // Restamos 1 hora
+            $fecha->modify('-1 hour');
+
+            // Verificamos si el día es sábado (6), domingo (0) o festivo
+            $diaSemana = (int)$fecha->format('w');
+            $esFinDeSemana = ($diaSemana === 0 || $diaSemana === 6);
+            $esFestivo = in_array($fecha->format('Y-m-d'), $festivos);
+
+            if (!$esFinDeSemana && !$esFestivo) {
+                $horasRestadas++;
+            }
+        }
+
+        return $fecha->format('Y-m-d H:i:s');
     }
 }
