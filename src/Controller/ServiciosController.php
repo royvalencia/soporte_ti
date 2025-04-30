@@ -454,7 +454,7 @@ class ServiciosController extends AppController
 
                     try {
                         $email2->send();
-                        $this->Flash->success('El correo de cerraso se envió correctamente.');
+                        $this->Flash->success('El correo de cerrar se envió correctamente.');
                     } catch (Exception $e) {
                         $this->Flash->error('Error al enviar el correo de notificación: ' . $e->getMessage());
                     }
