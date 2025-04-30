@@ -231,6 +231,7 @@ class ServiciosController extends AppController
         }
 
         $agenteanterior = $servicio->agente;
+        $estadoanterior = $servicio->statu_id;
         //$user = $this->Auth->User('co_user_id');
         //$grupo = $this->Auth->User('co_group_id');
 
@@ -409,6 +410,7 @@ class ServiciosController extends AppController
             } elseif (isset($_POST['GuardarE'])) {
                 $servicio2 = $this->Servicios->patchEntity($servicio, $this->request->getData());
                 $agentenuevo = $this->request->data['agente'];
+                $estadonuevo = $this->request->data['statu_id'];
 
                 if ($agentenuevo != $agenteanterior) {
                     //enviar correo
@@ -444,6 +446,40 @@ class ServiciosController extends AppController
                         $this->Flash->error('Error al enviar el correo de notificación: ' . $e->getMessage());
                     }
                 }
+
+                if ($estadonuevo != $estadoanterior &&  $estadonuevo==6) {
+                    //enviar correo al director general
+                    
+
+                    $agentes = $this->Servicios->CoUsers->get(14);
+                    $emailagentenue = $agentes->email;
+                    $nombreagentenue = $agentes->nombre;
+
+                    $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->servicio_id;
+
+
+                    //Envio de Correo de Notificacion
+                    $email2 = new Email('default');
+                    $email2->setTo($emailagentenue)
+                        ->setSubject('Ticket Cerrado')
+                        ->setEmailFormat('html')
+                        ->setTemplate('closedticket')
+                        ->setViewVars([
+                            'servicio' => $servicio,
+                            'username' => $nombreagentenue,
+                            'noticket' => $servicio->servicio_id,
+                            'LinkTicket' => $LinkTicket
+
+                        ]);
+
+                    try {
+                        $email2->send();
+                        $this->Flash->success('El correo de cerrar se envió correctamente.');
+                    } catch (Exception $e) {
+                        $this->Flash->error('Error al enviar el correo de notificación: ' . $e->getMessage());
+                    }
+                }
+
                 if ($this->Servicios->save($servicio2)) {
                     $this->Flash->success(__('El Servicio fué actualizado con éxito.'));
 
