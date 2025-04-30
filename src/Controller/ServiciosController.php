@@ -435,7 +435,7 @@ class ServiciosController extends AppController
                     $emailagentenue = $agentes->email;
                     $nombreagentenue = $agentes->nombre;
 
-                    $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->id;
+                    $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->servicio_id;
 
 
                     //Envio de Correo de Notificacion
@@ -443,7 +443,7 @@ class ServiciosController extends AppController
                     $email2->setTo($emailagentenue)
                         ->setSubject('Ticket Cerrado')
                         ->setEmailFormat('html')
-                        ->setTemplate('reasignaage')
+                        ->setTemplate('closedticket')
                         ->setViewVars([
                             'servicio' => $servicio,
                             'username' => $nombreagentenue,
