@@ -119,7 +119,7 @@
 
 
 
-              echo $this->Form->input('co_group_id', ['label' => 'Clasificación del Servicio', 'empty' => 'Seleccionar...', 'options' => $coGroups,'title'=>'Ej. Sistemas de información (Opergob, Pagina Web Sefiplan, Portal de Servidor Público, etc) - Ej. Soporte Técnico (Problemas de internet, mantenimiento de equipos, equipos no funcionan)','required'=>'required']); ?>
+              echo $this->Form->input('co_group_id', ['label' => 'Clasificación del Servicio', 'empty' => 'Seleccionar...', 'options' => $coGroups,'title'=>'Ej. Sistemas de información (Opergob, Pagina Web Sefiplan, Portal de Servidor Público, etc) - Soporte Técnico y Centro de Datos: Mantenimiento de equipos, seguridad, planta de energia, centro de datos y servidores. - Servicios Tecnológicos: Problemas de red e internet, creación y ayuda con el correo electrónico institucional, instalación de redes, conmutador, extensiones, atención a la Infraestructura tecnológica.','required'=>'required']); ?>
               <div id="post1">
                 <?php
                 //echo $this->Form->input('grupo_id', array('label' => array('text' => 'Módulo'), 'options' => array('text' => 'Seleccionar...')));
