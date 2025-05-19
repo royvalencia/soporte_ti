@@ -71,21 +71,30 @@
                 $totalIncidencias = 0;
                 
                 foreach ($serviciosUsuarios as $serviciosUsuarios2) {
+                  ?>
+                  <pre>
+  <?php
+  echo $serviciosUsuarios2;
+  ?>
+</pre>
+<?php
                   $totalIncidencias = $totalIncidencias + $serviciosUsuarios2->count;
                 }
 
                 ?>
                <?php foreach ($serviciosUsuarios as $serviciosUsuarios2): ?>
                  <tr>
-                   <td><?php //echo $serviciosUsuarios2->co_user->co_user_id;  
-                        ?>
-                     <?php echo $this->Html->link(__($serviciosUsuarios2->co_user->nombre), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user->co_user_id), array('class' => '', 'escape' => false)); ?>
-                   </td>
-                   <td><?php echo $serviciosUsuarios2->count;  ?></td>
                    <td>
-                     <h6><?php echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?> %</h6>
+                     <?php 
+                     echo $serviciosUsuarios2->co_user['nombre'];
+                     //echo $this->Html->link(__($serviciosUsuarios2->co_user['nombre']), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user['co_user_id']), array('class' => '', 'escape' => false));  
+                     ?>
+                   </td>
+                   <td><?php echo $serviciosUsuarios2['count'];  ?></td>
+                   <td>
+                     <h6><?php //echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?> %</h6>
                      <div class="progress progress-mini">
-                       <div style="width: <?php echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
+                       <div style="width: <?php //echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
                      </div>
 
                    </td>
