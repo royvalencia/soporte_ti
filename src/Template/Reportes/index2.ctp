@@ -8,7 +8,11 @@
   echo   $this->Html->script('highcharts/modules/exporting');
   echo   $this->Html->script('highcharts/modules/offline-exporting');
 
+
+
+  use Cake\I18n\FrozenTime;
   ?>
+
 
 
 
@@ -20,6 +24,264 @@
          <div class="col-sm-12">
            <h2>Estadísticas</h2>
          </div>
+
+
+
+
+       </div>
+     </div>
+   </div>
+
+
+
+   <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <?php foreach ($serviciosTotal as $serviciosUsuarios2) { ?>
+         <div class="row">
+           <div class="col-sm-3">
+            <div class="widget style1">
+                        <div class="row">
+                            <div class="col-xs-4 text-center">
+                                <i class="fa fa-trophy fa-5x"></i>
+                            </div>
+                            <div class="col-xs-8 text-right">
+                                <span> Total Tickets </span>
+                                <h2 class="font-bold"><?php echo $serviciosUsuarios2->count; ?></h2>
+                            </div>
+                        </div>
+                </div>
+             
+           </div>
+           <div class="col-sm-3">
+            <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-folder-open fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span> Abiertos</span>
+                            <h2 class="font-bold"><?php echo $serviciosUsuarios2->abiertos; ?></h2>
+                        </div>
+                    </div>
+                </div>
+             
+           </div>
+           <div class="col-sm-3">
+            <div class="widget style1 lazur-bg">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-folder fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span> Finalizados </span>
+                            <h2 class="font-bold"><?php echo $serviciosUsuarios2->finalizados; ?></h2>
+                        </div>
+                    </div>
+                </div>
+             
+           </div>
+           <div class="col-sm-3">
+            <div class="widget style1 yellow-bg">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-star fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span> Porcentaje </span>
+                            <h2 class="font-bold"> <?php echo round($serviciosUsuarios2->eficacia)."%"; ?></h2>
+                        </div>
+                    </div>
+                </div>
+             
+           </div>
+         </div>
+       <?php
+
+        }
+
+        ?>
+
+     </div>
+   </div>
+
+
+
+
+   <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <div class="row">
+         <div class="col-lg-12">
+           <h2>Top 10 Tickets Sin Asignar</h2>
+         </div>
+       </div>
+
+       <div class="row">
+         <div class="col-lg-12">
+           <table class="table table-striped">
+             <thead>
+               <tr>
+                 <th width="10%">Pos</th>
+                 <th width="20%">Ticket</th>
+                 <th width="40%">Tiempo</th>
+                 <th width="30%">Area</th>
+               </tr>
+             </thead>
+             <tbody>
+               <?php
+
+             
+
+                foreach ($serviciosSinasignar as $serviciosUsuarios2) {
+                ?>
+
+               <?php
+
+                }
+                $pos =  1;
+                ?>
+               <?php foreach ($serviciosSinasignar as $serviciosUsuarios2): ?>
+
+                 <tr>
+
+                   <td><?php echo $pos; ?></td>
+                   <td>
+                   <?= h(strtoupper($serviciosUsuarios2->servicio_id)) ? $this->Html->link(strtoupper($serviciosUsuarios2->servicio_id), ['controller' => 'Servicios', 'action' => 'view', $serviciosUsuarios2->servicio_id]) : '' ?> 
+                   </td>
+                   <td><?php
+                        $ahora = FrozenTime::now();
+                        $diferencia = $serviciosUsuarios2->created->diff($ahora);
+
+                        if ($diferencia->days > 0) {
+                          $tiempo_transcurrido = "{$diferencia->days} días";
+                        } elseif ($diferencia->h > 0) {
+                          $tiempo_transcurrido = "{$diferencia->h} horas";
+                        } else {
+                          $tiempo_transcurrido = "{$diferencia->i} minutos";
+                        }
+                        echo $tiempo_transcurrido;
+
+                        ?></td>
+                   <td>
+                     <?php
+                      if ($serviciosUsuarios2->agente == 4) {
+                        echo "Sistemas";
+                      } elseif ($serviciosUsuarios2->agente == 12) {
+                        echo "Técnica";
+                      } elseif ($serviciosUsuarios2->agente == 243) {
+                        echo "Servicios Tecnológicos";
+                      }
+                      ?>
+                   </td>
+
+                 </tr>
+               <?php
+                  $pos++;
+                endforeach; ?>
+
+
+
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+
+
+
+
+
+
+    <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <div class="row">
+         <div class="col-lg-12">
+           <h2>Top 10 Tickets Sin Seguimiento</h2>
+         </div>
+       </div>
+
+       <div class="row">
+         <div class="col-lg-12">
+           <table class="table table-striped">
+             <thead>
+               <tr>
+                 <th width="10%">Pos</th>
+                 <th width="20%">Ticket</th>
+                 <th width="40%">Tiempo</th>
+                 <th width="30%">Area</th>
+               </tr>
+             </thead>
+             <tbody>
+               <?php
+
+
+                foreach ($serviciosSinatender as $serviciosUsuarios2) {
+                ?>
+
+               <?php
+
+                }
+                $pos =  1;
+                ?>
+               <?php foreach ($serviciosSinatender as $serviciosUsuarios2): ?>
+
+                 <tr>
+
+                   <td><?php echo $pos; ?></td>
+                   <td><?= h(strtoupper($serviciosUsuarios2->servicio_id)) ? $this->Html->link(strtoupper($serviciosUsuarios2->servicio_id), ['controller' => 'Servicios', 'action' => 'view', $serviciosUsuarios2->servicio_id]) : '' ?> </td>
+                   <td><?php
+                        $ahora = FrozenTime::now();
+                        $diferencia = $serviciosUsuarios2->fecha_creacion->diff($ahora);
+
+                        if ($diferencia->days > 0) {
+                          $tiempo_transcurrido = "{$diferencia->days} días";
+                        } elseif ($diferencia->h > 0) {
+                          $tiempo_transcurrido = "{$diferencia->h} horas";
+                        } else {
+                          $tiempo_transcurrido = "{$diferencia->i} minutos";
+                        }
+                        echo $tiempo_transcurrido;
+
+                        ?></td>
+                   <td>
+                     <?php
+                      if ($serviciosUsuarios2->co_group_id == 4) {
+                        echo "Sistemas";
+                      } elseif ($serviciosUsuarios2->co_group_id == 3) {
+                        echo "Técnica";
+                      } elseif ($serviciosUsuarios2->co_group_id == 6) {
+                        echo "Servicios Tecnológicos";
+                      } elseif ($serviciosUsuarios2->co_group_id == 5) {
+                        echo "Funciones Administrativas";
+                      }
+                      ?>
+                   </td>
+
+                 </tr>
+               <?php
+                  $pos++;
+                endforeach; ?>
+
+
+
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+
+
+
+
+
+
+
+
+   <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <div class="row">
+
 
 
 
@@ -47,11 +309,15 @@
 
 
 
+
+
+
+
    <div class="ibox float-e-margins">
      <div class="ibox-content">
        <div class="row">
          <div class="col-lg-12">
-           <h2>Incidencias por Usuario</h2>
+           <h2>Agentes Dirección de Sistemas</h2>
          </div>
        </div>
 
@@ -61,37 +327,44 @@
              <thead>
                <tr>
                  <th width="40%">Usuario</th>
+                 <th width="10%">Abiertos</th>
+                 <th width="10%">Finalizados</th>
                  <th width="10%">Total</th>
-                 <th width="10%">Esfuerzo</th>
-                 <th width="10%">Esfuerzo Promedio</th>
-                 <th width="30%">Porcentaje</th>
+                 <th width="30%">Indice Total Finalizados</th>
                </tr>
              </thead>
              <tbody>
                <?php
+                $totalabiertos = 0;
+                $totalfinalizados = 0;
                 $totalIncidencias = 0;
-                $totalEsfuerzo = 0;
-                $totalEsfuerzoPromedio = 0;
-                foreach ($serviciosUsuarios as $serviciosUsuarios2) {
+
+                foreach ($serviciosUsuariosDSI as $serviciosUsuarios2) {
+                ?>
+
+               <?php
+                  $totalabiertos = $totalabiertos + $serviciosUsuarios2->abiertos;
+                  $totalfinalizados = $totalfinalizados + $serviciosUsuarios2->finalizados;
                   $totalIncidencias = $totalIncidencias + $serviciosUsuarios2->count;
-                  $totalEsfuerzo = $totalEsfuerzo + $serviciosUsuarios2->esfuerzo;
-                  $totalEsfuerzoPromedio = $totalEsfuerzoPromedio + round($serviciosUsuarios2->esfuerzo / $serviciosUsuarios2->count);
                 }
 
                 ?>
-               <?php foreach ($serviciosUsuarios as $serviciosUsuarios2): ?>
+               <?php foreach ($serviciosUsuariosDSI as $serviciosUsuarios2): ?>
+
                  <tr>
-                   <td><?php //echo $serviciosUsuarios2->co_user->co_user_id;  
-                        ?>
-                     <?php echo $this->Html->link(__($serviciosUsuarios2->co_user->nombre), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user->co_user_id), array('class' => '', 'escape' => false)); ?>
-                   </td>
-                   <td><?php echo $serviciosUsuarios2->count;  ?></td>
-                   <td><?php echo $serviciosUsuarios2->esfuerzo;  ?></td>
-                   <td><?php echo round($serviciosUsuarios2->esfuerzo / $serviciosUsuarios2->count);  ?></td>
                    <td>
-                     <h6><?php echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?> %</h6>
+                     <?php
+                      echo $serviciosUsuarios2->CoUsers['nombre'];
+                      //echo $this->Html->link(__($serviciosUsuarios2->co_user['nombre']), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user['co_user_id']), array('class' => '', 'escape' => false));  
+                      ?>
+                   </td>
+                   <td><?php echo $serviciosUsuarios2['abiertos'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['finalizados'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['count'];  ?></td>
+                   <td>
+                     <h6><?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?> %</h6>
                      <div class="progress progress-mini">
-                       <div style="width: <?php echo number_format(($serviciosUsuarios2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
+                       <div style="width: <?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?>%;" class="progress-bar"></div>
                      </div>
 
                    </td>
@@ -100,111 +373,18 @@
 
                <tr>
                  <td>TOTALES</td>
+                 <td><?php echo $totalabiertos;  ?></td>
+                 <td><?php echo $totalfinalizados;  ?></td>
                  <td><?php echo $totalIncidencias;  ?></td>
-                 <td><?php echo $totalEsfuerzo;  ?></td>
-                 <td><?php echo $totalEsfuerzoPromedio;  ?></td>
                  <td>
-                   <h6>100 %</h6>
+                   <h6><?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?> %</h6>
                    <div class="progress progress-mini">
-                     <div style="width: 100%;" class="progress-bar"></div>
+                     <div style="width: <?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
                    </div>
 
                  </td>
-               </tr>
-
-             </tbody>
-           </table>
-         </div>
-       </div>
-     </div>
-   </div>
-
-   <!--
-    <div class="ibox float-e-margins">                                                                                                                                                   
-                <div class="ibox-content">  
-                  <div class="row">                                                           
-                    <div class="col-lg-12">
-                            <h2>Incidencias por Área</h2>
-                    </div>                      
-                  </div> 
-                                                                    
-                  <div class="row">                                                           
-                     <div class="col-sm-12"> 
-                    
-                            <div id="estadisticas" style="min-width: 310px;"></div>
-                    </div>                      
-                  </div>                                                    
-                </div>              
-        </div>        -->
 
 
-   <div class="ibox float-e-margins">
-     <div class="ibox-content">
-       <div class="row">
-         <div class="col-lg-12">
-           <h2>Incidencias por Área</h2>
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-sm-12">
-
-           <div id="estadisticas2" style="min-width: 310px; height: 600px"></div>
-         </div>
-       </div>
-     </div>
-   </div>
-
-
-
-   <div class="ibox float-e-margins">
-     <div class="ibox-content">
-       <div class="row">
-         <div class="col-lg-12">
-           <h2>Incidencias por Estatus</h2>
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-lg-12">
-           <table class="table table-striped">
-             <thead>
-               <tr>
-                 <th width="50%">Estatus</th>
-                 <th width="20%">Total</th>
-                 <th width="30%">Porcentaje</th>
-               </tr>
-             </thead>
-             <tbody>
-               <?php
-                $totalIncidencias = 0;
-                foreach ($serviciosEstatus as $serviciosEstatus2)
-                  $totalIncidencias = $totalIncidencias + $serviciosEstatus2->count; ?>
-
-               <?php foreach ($serviciosEstatus as $serviciosEstatus2): ?>
-                 <tr>
-                   <td><?php echo $serviciosEstatus2->status->descripcion;  ?></td>
-                   <td><?php echo $serviciosEstatus2->count;  ?></td>
-                   <td>
-                     <h6><?php echo number_format(($serviciosEstatus2->count * 100) / $totalIncidencias, 2); ?> %</h6>
-                     <div class="progress progress-mini">
-                       <div style="width: <?php echo number_format(($serviciosEstatus2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
-                     </div>
-
-                   </td>
-                 </tr>
-               <?php endforeach; ?>
-
-               <tr>
-                 <td>TOTALES</td>
-                 <td><?php echo $totalIncidencias;  ?></td>
-                 <td>
-                   <h6>100 %</h6>
-                   <div class="progress progress-mini">
-                     <div style="width: 100%;" class="progress-bar"></div>
-                   </div>
-
-                 </td>
                </tr>
 
              </tbody>
@@ -215,11 +395,14 @@
    </div>
 
 
+
+
+
    <div class="ibox float-e-margins">
      <div class="ibox-content">
        <div class="row">
          <div class="col-lg-12">
-           <h2>Incidencias por Tipo de Servicio</h2>
+           <h2>Agentes Dirección Técnica</h2>
          </div>
        </div>
 
@@ -228,111 +411,45 @@
            <table class="table table-striped">
              <thead>
                <tr>
-                 <th width="20%">Grupo</th>
-                 <th width="30%">Tipo Servicio</th>
+                 <th width="40%">Usuario</th>
+                 <th width="10%">Abiertos</th>
+                 <th width="10%">Finalizados</th>
                  <th width="10%">Total</th>
-                 <th width="10%">Esfuerzo</th>
-                 <th width="10%">Esfuerzo Promedio</th>
-                 <th width="20%">Porcentaje</th>
+                 <th width="30%">Indice Total Finalizados</th>
                </tr>
              </thead>
              <tbody>
                <?php
+                $totalabiertos = 0;
+                $totalfinalizados = 0;
                 $totalIncidencias = 0;
-                $totalEsfuerzo = 0;
-                $totalEsfuerzoPromedio = 0;
-                foreach ($serviciosTipo as $serviciosTipo2) {
-                  $totalIncidencias = $totalIncidencias + $serviciosTipo2->count;
-                  $totalEsfuerzo = $totalEsfuerzo + $serviciosTipo2->esfuerzo;
-                  $totalEsfuerzoPromedio = $totalEsfuerzoPromedio + round($serviciosTipo2->esfuerzo / $serviciosTipo2->count);
-                }
+
+                foreach ($serviciosUsuariosDTI as $serviciosUsuarios2) {
                 ?>
 
-               <?php foreach ($serviciosTipo as $serviciosTipo2): ?>
-                 <tr>
-                   <td><?php echo $serviciosTipo2->tipo_servicio->grupo->descripcion;  ?></td>
-                   <td><?php //echo $serviciosTipo2->tipo_servicio->tipo_servicio_id;  
-                        ?>
-                     <?php echo $this->Html->link(__($serviciosTipo2->tipo_servicio->descripcion), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 2, $serviciosTipo2->tipo_servicio->tipo_servicio_id), array('class' => '', 'escape' => false)); ?>
-                   </td>
-                   <td><?php echo $serviciosTipo2->count;  ?></td>
-                   <td><?php echo $serviciosTipo2->esfuerzo;  ?></td>
-                   <td><?php echo round($serviciosTipo2->esfuerzo / $serviciosTipo2->count);  ?></td>
-                   <td>
-                     <h6><?php echo number_format(($serviciosTipo2->count * 100) / $totalIncidencias, 2); ?> %</h6>
-                     <div class="progress progress-mini">
-                       <div style="width: <?php echo number_format(($serviciosTipo2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
-                     </div>
-
-                   </td>
-                 </tr>
-               <?php endforeach; ?>
-
-               <tr>
-                 <td colspan="2">TOTALES</td>
-                 <td><?php echo $totalIncidencias;  ?></td>
-                 <td><?php echo $totalEsfuerzo;  ?></td>
-                 <td><?php echo $totalEsfuerzoPromedio;  ?></td>
-                 <td>
-                   <h6>100 %</h6>
-                   <div class="progress progress-mini">
-                     <div style="width: 100%;" class="progress-bar"></div>
-                   </div>
-
-                 </td>
-               </tr>
-
-             </tbody>
-           </table>
-         </div>
-       </div>
-     </div>
-   </div>
-
-
-
-   <div class="ibox float-e-margins">
-     <div class="ibox-content">
-       <div class="row">
-         <div class="col-lg-12">
-           <h2>Incidencias por Grupo</h2>
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-lg-12">
-           <table class="table table-striped">
-             <thead>
-               <tr>
-                 <th width="40%">Grupo</th>
-                 <th width="10%">Total</th>
-                 <th width="10%">Esfuerzo</th>
-                 <th width="10%">Esfuerzo Promedio</th>
-                 <th width="30%">Porcentaje</th>
-               </tr>
-             </thead>
-             <tbody>
                <?php
-                $totalIncidencias = 0;
-                $totalEsfuerzo = 0;
-                $totalEsfuerzoPromedio = 0;
-                foreach ($serviciosTipoGrupo as $serviciosTipo2) {
-                  $totalIncidencias = $totalIncidencias + $serviciosTipo2->count;
-                  $totalEsfuerzo = $totalEsfuerzo + $serviciosTipo2->esfuerzo;
-                  $totalEsfuerzoPromedio = $totalEsfuerzoPromedio + round($serviciosTipo2->esfuerzo / $serviciosTipo2->count);
+                  $totalabiertos = $totalabiertos + $serviciosUsuarios2->abiertos;
+                  $totalfinalizados = $totalfinalizados + $serviciosUsuarios2->finalizados;
+                  $totalIncidencias = $totalIncidencias + $serviciosUsuarios2->count;
                 }
-                ?>
 
-               <?php foreach ($serviciosTipoGrupo as $serviciosTipo2): ?>
+                ?>
+               <?php foreach ($serviciosUsuariosDTI as $serviciosUsuarios2): ?>
+
                  <tr>
-                   <td><?php echo $serviciosTipo2->tipo_servicio->grupo->descripcion;  ?></td>
-                   <td><?php echo $serviciosTipo2->count;  ?></td>
-                   <td><?php echo $serviciosTipo2->esfuerzo;  ?></td>
-                   <td><?php echo round($serviciosTipo2->esfuerzo / $serviciosTipo2->count);  ?></td>
                    <td>
-                     <h6><?php echo number_format(($serviciosTipo2->count * 100) / $totalIncidencias, 2); ?> %</h6>
+                     <?php
+                      echo $serviciosUsuarios2->CoUsers['nombre'];
+                      //echo $this->Html->link(__($serviciosUsuarios2->co_user['nombre']), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user['co_user_id']), array('class' => '', 'escape' => false));  
+                      ?>
+                   </td>
+                   <td><?php echo $serviciosUsuarios2['abiertos'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['finalizados'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['count'];  ?></td>
+                   <td>
+                     <h6><?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?> %</h6>
                      <div class="progress progress-mini">
-                       <div style="width: <?php echo number_format(($serviciosTipo2->count * 100) / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
+                       <div style="width: <?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?>%;" class="progress-bar"></div>
                      </div>
 
                    </td>
@@ -341,16 +458,18 @@
 
                <tr>
                  <td>TOTALES</td>
+                 <td><?php echo $totalabiertos;  ?></td>
+                 <td><?php echo $totalfinalizados;  ?></td>
                  <td><?php echo $totalIncidencias;  ?></td>
-                 <td><?php echo $totalEsfuerzo;  ?></td>
-                 <td><?php echo $totalEsfuerzoPromedio;  ?></td>
                  <td>
-                   <h6>100 %</h6>
+                   <h6><?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?> %</h6>
                    <div class="progress progress-mini">
-                     <div style="width: 100%;" class="progress-bar"></div>
+                     <div style="width: <?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
                    </div>
 
                  </td>
+
+
                </tr>
 
              </tbody>
@@ -360,27 +479,212 @@
      </div>
    </div>
 
- </div>
 
 
- <script>
-   // setMarkersMap(dataMap);
-   $(document).ready(function() {
-     $('.input-daterange').datepicker({
-       language: 'es'
+
+   <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <div class="row">
+         <div class="col-lg-12">
+           <h2>Agentes Dirección de Servicios Tecnológicos</h2>
+         </div>
+       </div>
+
+       <div class="row">
+         <div class="col-lg-12">
+           <table class="table table-striped">
+             <thead>
+               <tr>
+                 <th width="40%">Usuario</th>
+                 <th width="10%">Abiertos</th>
+                 <th width="10%">Finalizados</th>
+                 <th width="10%">Total</th>
+                 <th width="30%">Indice Total Finalizados</th>
+               </tr>
+             </thead>
+             <tbody>
+               <?php
+                $totalabiertos = 0;
+                $totalfinalizados = 0;
+                $totalIncidencias = 0;
+
+                foreach ($serviciosUsuariosDST as $serviciosUsuarios2) {
+                ?>
+
+               <?php
+                  $totalabiertos = $totalabiertos + $serviciosUsuarios2->abiertos;
+                  $totalfinalizados = $totalfinalizados + $serviciosUsuarios2->finalizados;
+                  $totalIncidencias = $totalIncidencias + $serviciosUsuarios2->count;
+                }
+
+                ?>
+               <?php foreach ($serviciosUsuariosDST as $serviciosUsuarios2): ?>
+
+                 <tr>
+                   <td>
+                     <?php
+                      echo $serviciosUsuarios2->CoUsers['nombre'];
+                      //echo $this->Html->link(__($serviciosUsuarios2->co_user['nombre']), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user['co_user_id']), array('class' => '', 'escape' => false));  
+                      ?>
+                   </td>
+                   <td><?php echo $serviciosUsuarios2['abiertos'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['finalizados'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['count'];  ?></td>
+                   <td>
+                     <h6><?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?> %</h6>
+                     <div class="progress progress-mini">
+                       <div style="width: <?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?>%;" class="progress-bar"></div>
+                     </div>
+
+                   </td>
+                 </tr>
+               <?php endforeach; ?>
+
+               <tr>
+                 <td>TOTALES</td>
+                 <td><?php echo $totalabiertos;  ?></td>
+                 <td><?php echo $totalfinalizados;  ?></td>
+                 <td><?php echo $totalIncidencias;  ?></td>
+                 <td>
+                   <h6><?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?> %</h6>
+                   <div class="progress progress-mini">
+                     <div style="width: <?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
+                   </div>
+
+                 </td>
+
+
+               </tr>
+
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+
+
+
+
+
+
+
+   <div class="ibox float-e-margins">
+     <div class="ibox-content">
+       <div class="row">
+         <div class="col-lg-12">
+           <h2>Agentes Funciones Administrativas</h2>
+         </div>
+       </div>
+
+       <div class="row">
+         <div class="col-lg-12">
+           <table class="table table-striped">
+             <thead>
+               <tr>
+                 <th width="40%">Usuario</th>
+                 <th width="10%">Abiertos</th>
+                 <th width="10%">Finalizados</th>
+                 <th width="10%">Total</th>
+                 <th width="30%">Indice Total Finalizados</th>
+               </tr>
+             </thead>
+             <tbody>
+               <?php
+                $totalabiertos = 0;
+                $totalfinalizados = 0;
+                $totalIncidencias = 0;
+
+                foreach ($serviciosUsuariosADM as $serviciosUsuarios2) {
+                ?>
+
+               <?php
+                  $totalabiertos = $totalabiertos + $serviciosUsuarios2->abiertos;
+                  $totalfinalizados = $totalfinalizados + $serviciosUsuarios2->finalizados;
+                  $totalIncidencias = $totalIncidencias + $serviciosUsuarios2->count;
+                }
+
+                ?>
+               <?php foreach ($serviciosUsuariosADM as $serviciosUsuarios2): ?>
+
+                 <tr>
+                   <td>
+                     <?php
+                      echo $serviciosUsuarios2->CoUsers['nombre'];
+                      //echo $this->Html->link(__($serviciosUsuarios2->co_user['nombre']), array('controller' => 'servicios', 'action' => 'index', $inicio, $fin, 1, $serviciosUsuarios2->co_user['co_user_id']), array('class' => '', 'escape' => false));  
+                      ?>
+                   </td>
+                   <td><?php echo $serviciosUsuarios2['abiertos'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['finalizados'];  ?></td>
+                   <td><?php echo $serviciosUsuarios2['count'];  ?></td>
+                   <td>
+                     <h6><?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?> %</h6>
+                     <div class="progress progress-mini">
+                       <div style="width: <?php echo number_format($serviciosUsuarios2['eficacia'], 2); ?>%;" class="progress-bar"></div>
+                     </div>
+
+                   </td>
+                 </tr>
+               <?php endforeach; ?>
+
+               <tr>
+                 <td>TOTALES</td>
+                 <td><?php echo $totalabiertos;  ?></td>
+                 <td><?php echo $totalfinalizados;  ?></td>
+                 <td><?php echo $totalIncidencias;  ?></td>
+                 <td>
+                   <h6><?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?> %</h6>
+                   <div class="progress progress-mini">
+                     <div style="width: <?php echo number_format($totalfinalizados * 100 / $totalIncidencias, 2); ?>%;" class="progress-bar"></div>
+                   </div>
+
+                 </td>
+
+
+               </tr>
+
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <script>
+     // setMarkersMap(dataMap);
+     $(document).ready(function() {
+       $('.input-daterange').datepicker({
+         language: 'es'
+       });
+
+
      });
 
 
-   });
+
+     Highcharts.setOptions({
+       colors: ['#FAE400', '#4C9C40', '#8DB235', '#534534', '#706B67', '#459CC1', '#6EB1B8']
+     });
 
 
-
-   Highcharts.setOptions({
-     colors: ['#FAE400', '#4C9C40', '#8DB235', '#534534', '#706B67', '#459CC1', '#6EB1B8']
-   });
-
-
-   /*
+     /*
 // Build the chart
 Highcharts.chart('estadisticas', {
     chart: {
@@ -428,59 +732,59 @@ Highcharts.chart('estadisticas', {
     }]
 });              */
 
-   Highcharts.chart('estadisticas2', {
-     chart: {
-       type: 'bar'
-     },
-     title: {
-       text: 'Servicios por Área'
-     },
-     credits: {
-       enabled: false
-     },
-     xAxis: {
-       type: 'category',
-       labels: {
-         //rotation: -45,
-         style: {
-           fontSize: '10px',
-           fontFamily: 'Verdana, sans-serif'
-         }
-       }
-     },
-     yAxis: {
-       min: 0,
+     Highcharts.chart('estadisticas2', {
+       chart: {
+         type: 'bar'
+       },
        title: {
-         text: 'Número de Servicios'
-       }
-     },
-     legend: {
-       enabled: false
-     },
-     tooltip: {
-       pointFormat: 'Servicios: <b>{point.y}</b>'
-     },
-     series: [{
-       name: 'Population',
-       colorByPoint: true,
-       data: [
-         <?php foreach ($serviciosArea as $serviciosArea2): ?>['<?php echo $serviciosArea2->cat_adscripcione->nom_ads; ?>', <?php echo $serviciosArea2->count; ?>],
-
-         <?php endforeach; ?>
-
-       ],
-       dataLabels: {
-         enabled: true,
-         //rotation: -90,
-         //color: '#FFFFFF',
-         align: 'right',
-         //format: '{point.y:.1f}', // one decimal
-         x: 20, // 10 pixels down from the top
-         style: {
-           fontSize: '10px',
-           fontFamily: 'Verdana, sans-serif'
+         text: 'Servicios por Área'
+       },
+       credits: {
+         enabled: false
+       },
+       xAxis: {
+         type: 'category',
+         labels: {
+           //rotation: -45,
+           style: {
+             fontSize: '10px',
+             fontFamily: 'Verdana, sans-serif'
+           }
          }
-       }
-     }]
-   });
- </script>
+       },
+       yAxis: {
+         min: 0,
+         title: {
+           text: 'Número de Servicios'
+         }
+       },
+       legend: {
+         enabled: false
+       },
+       tooltip: {
+         pointFormat: 'Servicios: <b>{point.y}</b>'
+       },
+       series: [{
+         name: 'Population',
+         colorByPoint: true,
+         data: [
+           <?php foreach ($serviciosArea as $serviciosArea2): ?>['<?php echo $serviciosArea2->cat_adscripcione->nom_ads; ?>', <?php echo $serviciosArea2->count; ?>],
+
+           <?php endforeach; ?>
+
+         ],
+         dataLabels: {
+           enabled: true,
+           //rotation: -90,
+           //color: '#FFFFFF',
+           align: 'right',
+           //format: '{point.y:.1f}', // one decimal
+           x: 20, // 10 pixels down from the top
+           style: {
+             fontSize: '10px',
+             fontFamily: 'Verdana, sans-serif'
+           }
+         }
+       }]
+     });
+   </script>
