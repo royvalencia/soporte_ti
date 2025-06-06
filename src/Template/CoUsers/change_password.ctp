@@ -102,7 +102,7 @@
                         <?= $this->Form->create($user ,[
                             'url' => ['action' => 'change-info'],
                             'type'=> 'post',
-                            'class' => 'form-horizontal'
+                            'class' => ''
                         ]); ?>
                         <div class="form-group row">
                             <?= $this->Form->input("nombre", array(
@@ -116,10 +116,45 @@
                             )); ?>
                         </div>
                         <div class="form-group row">
-                            <?= $this->Form->input("telefono", array(
+                            <div class="col-sm-8">
+                                <?= $this->Form->input("telefono", array(
+                                    'label'=>array(
+                                        'class'=>'col-sm-5 control-label',
+                                        'text'=>'Numero de Teléfono'
+                                    ),
+                                    'type'=>'tel',
+                                    'class'=>'form-control',
+                                    'required'=>true
+                                )); ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?= $this->Form->input("extension", array(
+                                    'label'=>array(
+                                        'class'=>'col-sm-5 control-label',
+                                        'text'=>'Extension'
+                                    ),
+                                    'type'=>'tel',
+                                    'class'=>'form-control',
+                                    'required'=>true
+                                )); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?= $this->Form->input("ubicacion_fisica", array(
                                 'label'=>array(
-                                    'class'=>'col-sm-5 control-label',
-                                    'text'=>'Numero de Telefono'
+                                    'class'=>'col-sm-3 control-label',
+                                    'text'=>'Ubicacion Fisica'
+                                ),
+                                'type'=>'tel',
+                                'class'=>'form-control',
+                                'required'=>true
+                            )); ?>
+                        </div>
+                        <div class="form-group row">
+                            <?= $this->Form->input("edificio", array(
+                                'label'=>array(
+                                    'class'=>'col-sm-3 control-label',
+                                    'text'=>'Edificio'
                                 ),
                                 'type'=>'tel',
                                 'class'=>'form-control',
@@ -136,6 +171,7 @@
                                 )); ?>
                             </div>
                         </div>
+                        
                         <?= $this->Form->end(); ?>
                     </div>
                 </div>

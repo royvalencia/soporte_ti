@@ -15,6 +15,7 @@
             class="form-control"
             required
             autofocus
+            autocomplete="off"
             aria-label="Correo Electrónico"
         />
         <i class="form-control-feedback fa fa-user fa-lg"  aria-hidden="true" style="top:8px;color:#a5b4c8"></i>

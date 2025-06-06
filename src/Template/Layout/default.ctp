@@ -40,7 +40,10 @@ $js_toggle_css ='  ';
         echo $this->Html->css('inspinia/custom'); //EStilos propios
     
      echo $this->Html->script('inspinia/jquery-2.1.1.js');
-    //    echo $scripts_for_layout;      
+
+        //Btn Ayuda/Modal
+    echo $this->Html->css('ModalEmp');
+    echo $this->Html->script('ModalEmp');
     
         ?>
     <?= $this->fetch('meta') ?>
@@ -148,24 +151,53 @@ $js_toggle_css ='  ';
 
     </div>
 </div>
+<?php
+    // echo $this->Html->script('inspinia/jquery-2.1.1.js');
+    echo $this->Html->script('inspinia/bootstrap.min');
+    echo $this->Html->script('inspinia/plugins/metisMenu/jquery.metisMenu');
+    echo $this->Html->script('inspinia/plugins/slimscroll/jquery.slimscroll.min');
+    echo $this->Html->script('inspinia/inspinia');
+    echo $this->Html->script('inspinia/plugins/pace/pace.min');
+    echo $this->Html->script('inspinia/plugins/toastr/toastr.min.js');  
 
-   
+    echo $this->Html->script('inspinia/custom');                       
+    //Mensajes del sistema
+    echo $this->Flash->render();
+    echo $this->Flash->render('auth',array('element'=>'unauthorized')); 
 
-         <?php
-         // echo $this->Html->script('inspinia/jquery-2.1.1.js');
-        echo $this->Html->script('inspinia/bootstrap.min');
-        echo $this->Html->script('inspinia/plugins/metisMenu/jquery.metisMenu');
-         echo $this->Html->script('inspinia/plugins/slimscroll/jquery.slimscroll.min');
-          echo $this->Html->script('inspinia/inspinia');
-           echo $this->Html->script('inspinia/plugins/pace/pace.min');
-         echo $this->Html->script('inspinia/plugins/toastr/toastr.min.js');  
+?>
+<?php
+//!MODAL DE AYUDA PARA BUSCAR EMPLEADOS
+    //Grupos Permitidos
+    $GruposPermitidos = [1];
+    $UsuariosPermitidos = [];
 
-           echo $this->Html->script('inspinia/custom');                       
-           //Mensajes del sistema
-        echo $this->Flash->render();
-          echo $this->Flash->render('auth',array('element'=>'unauthorized')); 
-        
-       ?>
-       
+    if (
+        in_array($Auth['co_group_id'], $GruposPermitidos) ||
+        in_array($Auth['id'], $UsuariosPermitidos)
+    ) :
+
+?>
+    <!-- Boton de Buscar EMP -->
+    <div id="help-button" class="help-button">
+        <button onclick="verModal()">
+            Busca Emp.. <i class="fa fa-user"></i>
+        </button>
+    </div>
+    <!-- Modal de Ayuda -->
+    <div id="help-modal" class="help-modal">
+        <div class="help-modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+                <h2 align="center">Consulta Empleados</h2>
+            <iframe 
+                id="help-iframe"
+                src="https://tramitesrh.qroo.gob.mx/portal/PadronServidores.php#rowBuscador" 
+                width="100%" 
+                height="600" 
+                style="border:none;">
+            </iframe>
+        </div>
+    </div>
+<?php endif; ?>
     </body>   
 </html>
