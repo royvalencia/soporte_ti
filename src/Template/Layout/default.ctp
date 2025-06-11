@@ -208,12 +208,13 @@ $js_toggle_css ='  ';
         onclick="window.scrollTo({top: 0, behavior: 'smooth'});" 
         title="Subir" 
         class="btn-updown">
-    &#8679;</button>
+    <i class="fa fa-angle-up" aria-hidden="true"></i></button>
     <button
         onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});"
         title="Bajar"
         class="btn-updown">
-    &#8681;</button>
+    <i class="fa fa-angle-down" aria-hidden="true"></i>
+</button>
 </div>
 </div>
     </body>   
