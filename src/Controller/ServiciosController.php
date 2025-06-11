@@ -355,7 +355,7 @@ class ServiciosController extends AppController
                             $agentes = $this->Servicios->CoUsers->get($servicio->agente);
                             $emailagente = $agentes->email;
                             $nombreagente = $agentes->nombre;
-                            $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $servicio->id;
+                            $LinkTicket = RUTA_PRINCIPAL . 'servicios/view/' . $id;
 
                             if ($comentario->co_user_id == $registradoPorUsuario->co_user_id) {
                                 $email = new Email('default');
