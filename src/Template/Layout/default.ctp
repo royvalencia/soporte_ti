@@ -44,6 +44,9 @@ $js_toggle_css ='  ';
         //Btn Ayuda/Modal
     echo $this->Html->css('ModalEmp');
     echo $this->Html->script('ModalEmp');
+
+    //Btn Desplazamiento
+    echo $this->Html->css('myestilos');
     
         ?>
     <?= $this->fetch('meta') ?>
@@ -199,5 +202,19 @@ $js_toggle_css ='  ';
         </div>
     </div>
 <?php endif; ?>
+<!-- Boton de Dezplazamiento -->
+ <div id="scroll-buttons" style="position:fixed;bottom:70px;right:30px;z-index:9999;">
+     <button 
+        onclick="window.scrollTo({top: 0, behavior: 'smooth'});" 
+        title="Subir" 
+        class="btn-updown">
+    &#8679;</button>
+    <button
+        onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});"
+        title="Bajar"
+        class="btn-updown">
+    &#8681;</button>
+</div>
+</div>
     </body>   
 </html>
