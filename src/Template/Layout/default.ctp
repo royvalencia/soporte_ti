@@ -173,7 +173,7 @@ $js_toggle_css ='  ';
 //!MODAL DE AYUDA PARA BUSCAR EMPLEADOS
     //Grupos Permitidos
     $GruposPermitidos = [1];
-    $UsuariosPermitidos = [];
+    $UsuariosPermitidos = [4];
 
     if (
         in_array($Auth['co_group_id'], $GruposPermitidos) ||
