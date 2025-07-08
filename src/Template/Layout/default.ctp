@@ -177,7 +177,7 @@ $js_toggle_css ='  ';
 
     if (
         in_array($Auth['co_group_id'], $GruposPermitidos) ||
-        in_array($Auth['id'], $UsuariosPermitidos)
+        in_array($Auth['co_user_id'], $UsuariosPermitidos)
     ) :
 
 ?>
