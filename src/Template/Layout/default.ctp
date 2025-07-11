@@ -171,9 +171,11 @@ $js_toggle_css ='  ';
 ?>
 <?php
 //!MODAL DE AYUDA PARA BUSCAR EMPLEADOS
-    //Grupos Permitidos
+    //Grupos Permitidos admin
     $GruposPermitidos = [1];
-    $UsuariosPermitidos = [4];
+    //Usuarios Permitidos
+    //Linda,Angel,Pinzon,Rodrigo,SoporteCorreo
+    $UsuariosPermitidos = [4,12,70,243,272];
 
     if (
         in_array($Auth['co_group_id'], $GruposPermitidos) ||
