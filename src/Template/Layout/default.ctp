@@ -174,8 +174,9 @@ $js_toggle_css ='  ';
     //Grupos Permitidos admin
     $GruposPermitidos = [1];
     //Usuarios Permitidos
-    //Linda,Angel,Pinzon,Rodrigo,SoporteCorreo
-    $UsuariosPermitidos = [4,12,70,243,272];
+    //Linda,Angel,Pinzon,Rodrigo,SoporteCorreo,
+    //04/08/25 SoporteObra,Departamento de Sistemas,Pedro
+    $UsuariosPermitidos = [4,12,70,243,272,10,29,49];
 
     if (
         in_array($Auth['co_group_id'], $GruposPermitidos) ||
