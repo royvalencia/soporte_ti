@@ -363,6 +363,45 @@ class CoUsersController extends AppController
         $this->set(compact('usuarios'));
     }
 
+    public function generatePdf(){
+        
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+
+        $this->loadComponent('Pdf');
+
+        // Deshabilitar la carga automática de vistas
+        $this->viewBuilder()->setLayout(false);
+        $this->autoRender = false;
+
+        // Título del PDF
+        $title = 'Ejemplo de PDF con FPDF';
+
+        // Datos para el contenido del PDF
+        $data = [
+            'Línea 1: Este es un ejemplo de PDF.',
+            'Línea 2: Generado con FPDF en CakePHP.',
+            'Línea 3: Puedes personalizarlo como desees.'
+        ];
+
+        // Validar datos
+        if (empty($data)) {
+            die('No hay datos para generar el PDF.');
+        }
+
+        // Generar el PDF
+        try {
+            // Configurar encabezados HTTP
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="documento.pdf"');
+            header('Cache-Control: private, max-age=0, must-revalidate');
+            header('Pragma: public');
+
+            $this->Pdf->createPdf($title, $data, 'I');
+        } catch (\Exception $e) {
+            die('Error al generar el PDF: ' . $e->getMessage());
+        }
+    }
     /**
     * Exportar a EXcel
     *
@@ -531,7 +570,7 @@ class CoUsersController extends AppController
     * Obtener el Home page del usuario
     *
     */
-  private  function _getHomePage(){
+    private  function _getHomePage(){
         $group_id = $this->Auth->user('co_group_id');
         //buscamos en el grupo los datos del home page
         $grupo=  $this->CoUsers->CoGroups->find('all',['conditions'=>['CoGroups.co_group_id'=>$group_id]])->first();;
@@ -547,9 +586,8 @@ class CoUsersController extends AppController
     * Cerrar Sesion
     *
     */
-    public function logout()
-    {
-         $this->request->session()->destroy();//Destruimos la sesions por aquello del os permisos
+    public function logout(){
+        $this->request->session()->destroy();//Destruimos la sesions por aquello del os permisos
         return $this->redirect($this->Auth->logout());
     }
 
@@ -664,16 +702,15 @@ class CoUsersController extends AppController
      * Login por Pasos
      **/
     /** V2 */
-    public function login()
-    {
+    public function login(){
         if ($this->request->is('post')) {
         // Procesa la solicitud del correo electrónico aquí si es necesario
         }
         $this->viewBuilder()->setLayout('login');
         $this->render('loginpaso1');
     }
-    public function loginpaso1()
-    {
+
+    public function loginpaso1(){
         if ($this->request->is('post')) {
             $login = $this->request->getData('login');
             $user = $this->CoUsers->find('all', [
@@ -729,40 +766,55 @@ class CoUsersController extends AppController
         $this->viewBuilder()->setLayout('plano');
 
         $coUser = $this->CoUsers->newEntity();
+        
         if ($this->request->is('post')) {
-            $coUser = $this->CoUsers->patchEntity($coUser, $this->request->getData());
+            $dependenciasEspeciales = ['2', '3', '4'];
+            $data = $this->request->getData();
+            
+
+            if (in_array($data['dependencia_id'], $dependenciasEspeciales) && !empty($data['texto_dependencia'])) {
+                $data['texto_dependencia'] = $data['texto_dependencia'];
+            }
+
+            $coUser = $this->CoUsers->patchEntity($coUser, $data);
+
+            //$coUser = $this->CoUsers->patchEntity($coUser, $this->request->getData());
             $coUser->login = $coUser->email;
             $coUser->co_group_id = 2;
             $coUser->active = 1;
             $coUser->super = 0;
             $coUser->image = '';
 
+            /* debug($coUser);
+            die(); */
+            //!VERIFICA SI HAY ERRORES 
+            if ($coUser->getErrors()) {
+                $this->Flash->error(__('Por favor, corrija los errores en el Formulario'));
+            } else {
+                if ($this->CoUsers->save($coUser)){
+                    try{
+                        $email = new Email('default');
+                        $rutaArchivo = WWW_ROOT .'upload' .DS. 'manual_soporte_tic.pdf';
+                        $email->setTo($coUser->email)
+                            ->setSubject('Gracias por Registrarte')
+                            ->setEmailFormat('html')
+                            ->setTemplate('register')
+                            ->setViewVars(['coUser' => $coUser, 'LinkPagina' => RUTA_PRINCIPAL])
+                            ->addAttachments($rutaArchivo,'Manual_Usuario.pdf')
+                            ->send();
 
-            if ($this->CoUsers->save($coUser))
-            {
-                try{
-                    $email = new Email('default');
-                    $rutaArchivo = WWW_ROOT .'upload' .DS. 'manual_soporte_tic.pdf';
-                    $email->setTo($coUser->email)
-                        ->setSubject('Gracias por Registrarte')
-                        ->setEmailFormat('html')
-                        ->setTemplate('register')
-                        ->setViewVars(['coUser' => $coUser, 'LinkPagina' => RUTA_PRINCIPAL])
-                        ->addAttachments($rutaArchivo,'Manual_Usuario.pdf')
-                        ->send();
-
-                    $this->Flash->success(__('El usuario ha sido guardado.'));
-                }catch (\Exception $e){
-                    // Manejar el error del envío de correo
-                    $this->Flash->error(__('El usuario ha sido guardado, pero no se pudo enviar el correo de verificación. Por favor, contacta al soporte.'));
-                    // Opcional: Registra el error para su revisión
-                    \Cake\Log\Log::write('error', 'Error al enviar correo de verificación: ' . $e->getMessage());
+                        $this->Flash->success(__('El usuario ha sido guardado.'));
+                    }catch (\Exception $e){
+                        // Manejar el error del envío de correo
+                        $this->Flash->error(__('El usuario ha sido guardado, pero no se pudo enviar el correo de verificación. Por favor, contacta al soporte.'));
+                        // Opcional: Registra el error para su revisión
+                        \Cake\Log\Log::write('error', 'Error al enviar correo de verificación: ' . $e->getMessage());
+                    }
+                    
+                    return $this->redirect(['action' => 'login']);
                 }
-
-
-                return $this->redirect(['action' => 'login']);
+                $this->Flash->error(__('No se pudo guardar el usuario. Por favor, intente nuevamente.'));
             }
-            $this->Flash->error(__('No se pudo guardar el usuario. Por favor, intente nuevamente.'));
         }
         $dependencias = $this->CoUsers->Dependencias->find('list', ['limit' => 200]);
         $direcciones = $this->CoUsers->Direcciones->find('list', ['limit' => 200]);

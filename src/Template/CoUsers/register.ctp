@@ -1,3 +1,14 @@
+<?php if (isset($coUser) && $coUser->getErrors()): ?>
+    <div class="alert alert-danger">
+        <ul>
+        <?php foreach ($coUser->getErrors() as $campo => $errores): ?>
+            <?php foreach ($errores as $error): ?>
+                <li><?= h($campo) ?>: <?= h($error) ?></li>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
         <div>
@@ -20,6 +31,7 @@
                 required
                 aria-label="Nombre"
             />
+            <?= $this->Form->error('nombre', ['class' => 'text-danger']) ?>
         </div>
         <div class="form-group row">
             <div class="col-sm-6">
@@ -31,9 +43,10 @@
                     placeholder=" Ej. 01234567890 000-000-0000"
                     class="form-control"
                     required
-                    pattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s\-\.]?\d{3}[\s\-\.]?\d{4}$"
                     aria-label="Telefono/Celular"
                 />
+                <?= $this->Form->error('telefono', ['class' => 'text-danger']) ?>
+
             </div>
             <div class="col-sm-6">
                 <label class="col-sm-1 col-form-label">Extensión</label>
@@ -47,6 +60,7 @@
                     pattern="^[0-9]{1,6}$"
                     aria-label="Extensión"
                 />
+                <?= $this->Form->error('extension', ['class' => 'text-danger']) ?>
             </div>
         </div>
         <div class="form-group">
@@ -61,6 +75,8 @@
                 aria-label="Correo Electrónico"
                 pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
             />
+            <?= $this->Form->error('email', ['class' => 'text-danger']) ?>
+
         </div>
 
         <div class="form-group">
@@ -70,8 +86,25 @@
                 'empty' => 'Seleccione una dependencia',
                 'class' => 'form-control',
                 'label' => false,
-                'required' => true
+                'required' => true,
+                'id' => 'dependencia_id'
             ]) ?>
+            <?= $this->Form->error('dependencia_id', ['class' => 'text-danger']) ?>
+
+        </div>
+
+        <div class="form-group" id="dependencia_texto" style="display: none;">
+            <label class="col-sm-6 col-form-label">** Especifique **</label>
+            <input
+                id="texto_dependencia"
+                name="texto_dependencia"
+                type="text"
+                placeholder="Ingrese su Dependencia"
+                class="form-control"
+                aria-label="Dependencia"
+            />
+            <?= $this->Form->error('text_dependencia', ['class' => 'text-danger']) ?>
+
         </div>
         <div class="form-group">
             <label class="col-sm-1 col-form-label">Direccion</label>
@@ -82,9 +115,11 @@
                 'label' => false,
                 'required' => true
             ]) ?>
+            <?= $this->Form->error('direccion_id', ['class' => 'text-danger']) ?>
+
         </div>
         <div class="form-group">
-            <label class="col-sm-7 col-form-label">Ubicación Física</label>
+            <label class="col-sm-6 col-form-label">Ubicación Física</label>
             <input
                 id="ubicacion_fisica"
                 name="ubicacion_fisica"
@@ -94,6 +129,8 @@
                 required
                 aria-label="Ubicación Física"
             />
+            <?= $this->Form->error('ubicacion_fisica', ['class' => 'text-danger']) ?>
+
         </div>
         <div class="form-group">
             <label class="col-sm-1 col-form-label">Edificio</label>
@@ -106,6 +143,7 @@
                 required
                 aria-label="Edificio"
             />
+            <?= $this->Form->error('edificio', ['class' => 'text-danger']) ?>
         </div>
         <div class="form-group">
             <label class="col-sm-1 col-form-label">Contraseña</label>
@@ -119,6 +157,8 @@
                 aria-label="Contraseña"
                 autocomplete="off"
             />
+            <?= $this->Form->error('password', ['class' => 'text-danger']) ?>
+
         </div>
         <div class="form-group">
             <label class="col-sm-7 col-form-label">Repetir Contraseña</label>
@@ -132,7 +172,7 @@
                 aria-label="Confirmar Contraseña"
                 autocomplete="off"
             />
-            <?= $this->Form->error('email', ['escape' => false]) ?>
+            <?= $this->Form->error('password_confirm', ['class' => 'text-danger']) ?>
         </div>
         <?php echo $this->Form->button('Crear Cuenta', ['class' => 'btn btn-success']); ?>
 
@@ -147,3 +187,20 @@
 
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.getElementById('dependencia_id');
+    var especifique = document.getElementById('dependencia_texto');
+
+    select.addEventListener('change', function() {
+        // Cambia '999' por el valor que debe activar el campo
+        if (this.value == '2' || this.value == '3' || this.value == '4') {
+            especifique.style.display = 'block';
+            document.getElementById('texto_dependencia').required = true;
+        } else {
+            especifique.style.display = 'none';
+            document.getElementById('texto_dependencia').required = false;
+        }
+    });
+});
+</script>
