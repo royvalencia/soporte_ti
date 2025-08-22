@@ -31,8 +31,13 @@
                                     <td><?= h($coUser->email) ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="field"><?= __('Teléfono') ?></td>
-                                    <td><?= h($coUser->telefono) ?></td>
+                                    <td class="field"><?= __('Teléfono / Ext.') ?></td>
+                                    <td>
+                                        <?= h($coUser->telefono) ?>
+                                        <?php if (!empty($coUser->extension)): ?>
+                                            &nbsp;/&nbsp;<?= h($coUser->extension) ?>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="field"><?= __('Dependencia') ?></td>
