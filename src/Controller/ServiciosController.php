@@ -732,9 +732,8 @@ class ServiciosController extends AppController
                 $descripcion = (string)$eventoBitacora->descripcion_evento;
                 $partesDescripcion = explode('||', $descripcion, 2);
 
-                $loginBitacora = trim($partesDescripcion[0] ?? ' ');
-                $nombreBitacora = $usuariosBitacora[$loginBitacora] ?? $loginBitacora;
-
+                $loginBitacora = trim(isset($partesDescripcion[0]) ? $partesDescripcion[0] : ' ');
+                $nombreBitacora = isset($usuariosBitacora[$loginBitacora]) ? $usuariosBitacora[$loginBitacora] : $loginBitacora;
                 if (!isset($partesDescripcion[1])) {
                     continue;
                 }
@@ -783,7 +782,7 @@ class ServiciosController extends AppController
                         'fecha' => $fechaBitacora,
                         'usuario' => $nombreBitacora !== '' ? $nombreBitacora : 'Usuario no disponible',
                         'login' => $loginBitacora,
-                        'campo' => $etiquetasBitacora[$campo] ?? ucfirst($campo),
+                        'campo' => isset($etiquetasBitacora[$campo]) ? $etiquetasBitacora[$campo] : ucfirst($campo),
                         'anterior' => $traducirValorBitacora($campo, $valores[0]),
                         'nuevo' => $traducirValorBitacora($campo, $valores[1]),
                     ];
@@ -1317,7 +1316,7 @@ class ServiciosController extends AppController
            }*/
             if (!empty($argumentos['statu_id'])) {
 
-                $statuIds = $argumentos['statu_id'] ?? []; // aseguramos que sea arreglo
+                $statuIds = isset($argumentos['statu_id']) ? (array)$argumentos['statu_id'] : []; // aseguramos que sea arreglo
 
                 if (in_array(9999, $statuIds)) {
                     // Si existe el 9999 en el arreglo, usar NOT IN
