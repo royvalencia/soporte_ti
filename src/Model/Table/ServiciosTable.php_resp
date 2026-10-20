@@ -1,0 +1,208 @@
+<?php
+namespace App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Servicios Model
+ *
+ * @property \App\Model\Table\TipoServiciosTable|\Cake\ORM\Association\BelongsTo $TipoServicios
+ * @property \App\Model\Table\TipoIncidenciasTable|\Cake\ORM\Association\BelongsTo $TipoIncidencias
+ * @property \App\Model\Table\PrioridadesTable|\Cake\ORM\Association\BelongsTo $Prioridades
+ * @property \App\Model\Table\CatAdscripcionesTable|\Cake\ORM\Association\BelongsTo $CatAdscripciones
+ * @property \App\Model\Table\CoUsersTable|\Cake\ORM\Association\BelongsTo $CoUsers
+ * @property \App\Model\Table\StatusTable|\Cake\ORM\Association\BelongsTo $Status
+ *
+ * @method \App\Model\Entity\Servicio get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Servicio newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Servicio[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Servicio|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Servicio patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Servicio[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Servicio findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class ServiciosTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->setTable('servicios');
+        $this->setDisplayField('servicio_id');
+        $this->setPrimaryKey('servicio_id');
+
+        $this->addBehavior('Timestamp');
+
+       
+        $this->belongsTo('TipoIncidencias', [
+            'foreignKey' => 'tipo_incidencia_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Prioridades', [
+            'foreignKey' => 'prioridade_id',
+            'joinType' => 'INNER'
+        ]);
+       
+        $this->belongsTo('CoUsers', [
+            'foreignKey' => 'co_user_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Status', [
+            'foreignKey' => 'statu_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Creador', [
+            'className' => 'CoUsers',
+            'foreignKey' => 'created_by',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Bitacoraservs', [
+            'foreignKey' => 'servicio_id',
+            'joinType' => 'INNER',
+            'dependent' => false
+        ]);
+        $this->hasMany('Adjuntos', [
+            'foreignKey' => 'servicio_id',
+            'joinType' => 'INNER',
+            'dependent' => false
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('servicio_id')
+            ->allowEmpty('servicio_id', 'create');
+
+        $validator
+            ->date('fecha_solicitud')
+            ->requirePresence('fecha_solicitud', 'create')
+            ->notEmpty('fecha_solicitud');
+
+        $validator
+            ->scalar('descripcion_corta')
+            ->maxLength('descripcion_corta', 200)
+            ->requirePresence('descripcion_corta', 'create')
+            ->notEmpty('descripcion_corta');
+
+        $validator
+            ->scalar('problematica')
+            ->requirePresence('problematica', 'create')
+            ->notEmpty('problematica');
+
+        $validator
+            ->scalar('no_inventario')
+            ->maxLength('no_inventario', 10)
+            ->requirePresence('no_inventario', 'false')
+            ->allowEmpty('no_inventario', 'true');
+
+        $validator
+            ->scalar('nombre_solicitante')
+            ->maxLength('nombre_solicitante', 150)
+            ->requirePresence('nombre_solicitante', 'create')
+            ->notEmpty('nombre_solicitante');
+
+        $validator
+            ->scalar('cargo_solicitante')
+            ->maxLength('cargo_solicitante', 50)
+            ->requirePresence('cargo_solicitante', 'false')
+            ->allowEmpty('cargo_solicitante','true');
+
+        $validator
+            ->scalar('telefono_solicitante')
+            ->maxLength('telefono_solicitante', 100)
+            ->requirePresence('telefono_solicitante', 'false')
+            ->allowEmpty('telefono_solicitante','true');
+
+        $validator
+            ->scalar('email_solicitante')
+            ->maxLength('email_solicitante', 150)
+            ->requirePresence('email_solicitante', 'false')
+            ->allowEmpty('email_solicitante','true');
+
+        $validator
+            ->date('fecha_limite_solucion')
+            ->requirePresence('fecha_limite_solucion', 'create')
+            ->notEmpty('fecha_limite_solucion');
+
+        $validator
+            ->scalar('solucion');
+            
+
+        $validator
+            ->date('fecha_solucion');
+            
+
+        $validator
+            ->scalar('notas')
+            ->requirePresence('notas', 'false')
+            ->allowEmpty('notas', 'true');
+
+         $validator
+            ->integer('esfuerzo')
+            ->requirePresence('esfuerzo', 'create')
+            ->notEmpty('esfuerzo');    
+
+        
+
+         $validator
+            ->scalar('tipo_incidencia_id')
+            ->notEmpty('tipo_incidencia_id');
+
+         $validator
+            ->scalar('prioridade_id')
+            ->notEmpty('prioridade_id');
+
+        
+
+         $validator
+            ->scalar('co_user_id')
+            ->notEmpty('co_user_id');
+            
+
+       
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        /*$rules->add($rules->existsIn(['tipo_servicio_id'], 'TipoServicios'));
+         $rules->add($rules->requirePresence('tipo_servicio_id', 'create')
+            ->notEmpty('tipo_servicio_id'));*/
+       
+        /*
+        $rules->add($rules->existsIn(['tipo_incidencia_id'], 'TipoIncidencias'));
+        $rules->add($rules->existsIn(['prioridade_id'], 'Prioridades'));
+        $rules->add($rules->existsIn(['cat_adscripcione_id'], 'CatAdscripciones'));
+        $rules->add($rules->existsIn(['co_user_id'], 'CoUsers'));
+        $rules->add($rules->existsIn(['statu_id'], 'Status'));*/
+
+        return $rules;
+    }
+}
