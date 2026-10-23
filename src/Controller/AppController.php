@@ -287,6 +287,44 @@ class AppController extends Controller
 
       }
 
+    /**
+     * Registra una linea JSON en logs/origen.log con el User-Agent y el
+     * Referer de la peticion actual (mas usuario, IP y contexto del evento).
+     *
+     * Nunca debe interrumpir el flujo principal: cualquier fallo de
+     * escritura se traga silenciosamente.
+     *
+     * @param string $evento login | crear_ticket | editar_ticket | consulta_index
+     * @param array $extra Contexto adicional (servicio_id, filtros, etc.)
+     * @return void
+     */
+    protected function logOrigen($evento, array $extra = [])
+    {
+        $usuario = $this->Auth->user('login');
+
+        $datos = [
+            'ts' => date('Y-m-d H:i:s'),
+            'evento' => $evento,
+            'usuario' => ($usuario !== null) ? $usuario : '',
+            'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'referer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
+        ];
+        if (!empty($extra)) {
+            $datos['extra'] = $extra;
+        }
+
+        try {
+            \Cake\Log\Log::write(
+                'info',
+                json_encode($datos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'origen'
+            );
+        } catch (\Exception $e) {
+            // El log de origen jamas debe tumbar login/ticket/consulta.
+        }
+    }
+
        /**
      * Agregar un email para enviar como notificacion
      * @param [type] $para      [description]

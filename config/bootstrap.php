@@ -147,6 +147,18 @@ ConnectionManager::setConfig(Configure::consume('Datasources'));
 Email::setConfigTransport(Configure::consume('EmailTransport'));
 Email::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
+
+/*
+ * Log dedicado de origen (User-Agent + Referer por evento).
+ * Se escribe desde AppController::logOrigen(); vive en logs/origen.log
+ * (directorio ignorado por git, mismo ciclo de vida que el resto de logs).
+ */
+Log::setConfig('origen', [
+    'className' => 'File',
+    'path' => LOGS,
+    'file' => 'origen',
+    'scopes' => ['origen'],
+]);
 Security::setSalt(Configure::consume('Security.salt'));
 
 /*

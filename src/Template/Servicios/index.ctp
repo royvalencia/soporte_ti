@@ -14,24 +14,22 @@
 <script>
    setInterval(() => {
       $.ajax({
-          method: 'get',
-          url: "<?php echo $this->Url->build(['controller' => 'Servicios', 'action' => 'refrescar']); ?>",
-          data: {
+         method: 'get',
+         url: "<?php echo $this->Url->build(['controller' => 'Servicios', 'action' => 'refrescar']); ?>",
+         data: {
             institucion: 1
-          },
-          success: function(response) {
-
+         },
+         success: function(response) {
             //alert(response);
             if (response!=0){
                alert("Hay Servicios nuevos Creados");
                //alert(response);
                location.reload();
             }
-
-          }
-        });
-
-   }, 15000);
+         }
+      });
+   }, 60000);
+   //Se cambio el tiempo de refrescar a 1 minuto
 </script>
 
 <div class="row wrapper border-bottom white-bg page-heading">

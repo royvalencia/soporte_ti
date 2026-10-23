@@ -8,6 +8,10 @@ echo '<thead>'.$tableHeaders.'</thead>'; ?>
 
 <?php
 	$i = 0;
+	// Resuelve un valor del catálogo por su id; si no existe muestra '—'.
+	$fmtCatalogo = function ($lista, $id) {
+		return isset($lista[$id]) ? h($lista[$id]) : '—';
+	};
 	foreach ($servicios as $servicio):
 		$class = null;
 		if ($i++ % 2 == 0) {
@@ -18,33 +22,33 @@ echo '<thead>'.$tableHeaders.'</thead>'; ?>
 		<td><?php echo $servicio->servicio_id; ?>&nbsp;</td>
 		<td><?php echo $servicio->asunto; ?>&nbsp;</td>
 		<td>
-			<?php echo $servicio->status->descripcion; ?>
+			<?php echo $fmtCatalogo($statusList, $servicio->statu_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->prioridade->descripcion; ?>
+			<?php echo $fmtCatalogo($prioridadesList, $servicio->prioridade_id); ?>
 		</td>
 		<td><?php echo date_format($servicio->created, 'd-m-Y'); ?>&nbsp;</td>
 		<td><?php echo date_format($servicio->modified, 'd-m-Y'); ?>&nbsp;</td>
 		<td>
-			<?php echo $servicio->tipo_incidencia->descripcion; ?>
+			<?php echo $fmtCatalogo($tiposList, $servicio->tipo_incidencia_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->co_group->name; ?>
+			<?php echo $fmtCatalogo($coGroupsList, $servicio->co_group_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->dependencia->nombre; ?>
+			<?php echo $fmtCatalogo($dependenciasList, $servicio->dependencia_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->direccione->nombre; ?>
+			<?php echo $fmtCatalogo($direccionesList, $servicio->direccione_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->grupo->descripcion; ?>
+			<?php echo $fmtCatalogo($gruposList, $servicio->grupo_id); ?>
 		</td>
 		<td>
-			<?php echo $servicio->co_user->nombre; ?>
+			<?php echo $fmtCatalogo($usuariosList, $servicio->co_user_id); ?>
 		</td>
 		<td>
-			<?php echo $agentes[$servicio->agente]; ?>
+			<?php echo $fmtCatalogo($agentes, $servicio->agente); ?>
 		</td>
 		<td><?php echo $servicio->referencia; ?>&nbsp;</td>
 		

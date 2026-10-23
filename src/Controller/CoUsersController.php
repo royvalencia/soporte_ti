@@ -713,6 +713,8 @@ class CoUsersController extends AppController
                     ->where(['co_user_id' => $this->Auth->user('co_user_id')])
                     ->execute();
 
+                $this->logOrigen('login');
+
                 return $this->redirect($this->Auth->redirectUrl());
             } else {
                 $this->Flash->error('Contraseña incorrecta, intente nuevamente.');

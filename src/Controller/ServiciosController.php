@@ -29,6 +29,14 @@ class ServiciosController extends AppController
         //Para evitar Cache
         $this->response->header('Cache-Control', 'no-cache');
 
+        // Registrar el origen (UA/Referer) solo cuando hay filtros de
+        // búsqueda; se excluye 'page' para no registrar la simple paginación.
+        $queryParams = $this->request->getQueryParams();
+        unset($queryParams['page']);
+        if (!empty($queryParams)) {
+            $this->logOrigen('consulta_index', ['filtros' => $queryParams]);
+        }
+
         // Obtener valores del formulario (POST o GET)
         $inicio = $this->request->getData('inicio') ?: $this->request->getQuery('inicio');
         $fin    = $this->request->getData('fin') ?: $this->request->getQuery('fin');
@@ -530,6 +538,7 @@ class ServiciosController extends AppController
                 } else {
                     // Guardar bitácora únicamente cuando existieron cambios.
                     if ($bitacora !== "") {
+                        $this->logOrigen('editar_ticket', ['servicio_id' => $id]);
                         $data5 = [
                             'servicio_id' => $id,
                             'descripcion_evento' => $bitacora,
@@ -938,6 +947,7 @@ class ServiciosController extends AppController
 
 
             if ($result = $this->Servicios->save($servicio)) {
+                $this->logOrigen('crear_ticket', ['servicio_id' => $result->servicio_id]);
 
                 //---------------
                 // Verificamos si se seleccionaron archivos
@@ -1415,9 +1425,26 @@ class ServiciosController extends AppController
         $this->viewBuilder()->layout('excel'); //Establecemos el Layout aqui
         //$query = $this->Servicios->find("all",['contain'=>['TipoServicios','CatAdscripciones','CoUsers','Status']]);
 
+        $camposExport = [
+            'Servicios.servicio_id',
+            'Servicios.asunto',
+            'Servicios.statu_id',
+            'Servicios.prioridade_id',
+            'Servicios.created',
+            'Servicios.modified',
+            'Servicios.tipo_incidencia_id',
+            'Servicios.co_group_id',
+            'Servicios.dependencia_id',
+            'Servicios.direccione_id',
+            'Servicios.grupo_id',
+            'Servicios.co_user_id',
+            'Servicios.agente',
+            'Servicios.referencia',
+        ];
+
         if ($tipo == 1) {
             $query = $this->Servicios->find("all", [
-                'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
+                'fields' => $camposExport,
                 'order' => ['servicio_id DESC'],
                 'conditions' => $conditions
             ]);
@@ -1430,7 +1457,7 @@ class ServiciosController extends AppController
             }
             $conditions['Servicios.co_group_id IN'] = $grupoB;
             $query = $this->Servicios->find("all", [
-                'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
+                'fields' => $camposExport,
                 'order' => ['servicio_id DESC'],
                 'conditions' => $conditions
 
@@ -1439,7 +1466,7 @@ class ServiciosController extends AppController
         } elseif ($tipo == 3) {
             $conditions['Servicios.co_group_id'] = $grupo;
             $query = $this->Servicios->find("all", [
-                'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
+                'fields' => $camposExport,
                 'order' => ['servicio_id DESC'],
                 'conditions' => $conditions
 
@@ -1448,7 +1475,7 @@ class ServiciosController extends AppController
         } elseif ($tipo == 4) {
             $conditions['Servicios.co_user_id'] = $user;
             $query = $this->Servicios->find("all", [
-                'contain' => ['Status', 'Prioridades', 'TipoIncidencias', 'CoGroups', 'Dependencias', 'Direcciones', 'Solicitantes', 'Grupos', 'CoUsers'],
+                'fields' => $camposExport,
                 'order' => ['servicio_id DESC'],
                 'conditions' => $conditions
             ]);
@@ -1456,6 +1483,7 @@ class ServiciosController extends AppController
         }
 
         $servicios = $query->all();
+        $this->logOrigen('exportar_excel', ['tipo' => $tipo]);
         $agentes = $this->Servicios->CoUsers->find('list', array(
             'contain' => array('CoGroups'),
             'conditions' => array(
@@ -1464,8 +1492,33 @@ class ServiciosController extends AppController
             'order' => array('CoUsers.nombre' => 'ASC')
         ))->toArray();
 
+        /*
+         * CATÁLOGOS EN ARREGLOS
+         */
+        $statusList = $this->Servicios->Status->find('list', ['valueField' => 'descripcion'])->toArray();
+        $prioridadesList = $this->Servicios->Prioridades->find('list', ['valueField' => 'descripcion'])->toArray();
+        $tiposList = $this->Servicios->TipoIncidencias->find('list', ['valueField' => 'descripcion'])->toArray();
+        $coGroupsList = $this->Servicios->CoGroups->find('list')->toArray();
+        $dependenciasList = $this->Servicios->Dependencias->find('list', ['valueField' => 'nombre'])->toArray();
+        $direccionesList = $this->Servicios->Direcciones->find('list', ['valueField' => 'nombre'])->toArray();
+        $gruposList = $this->Servicios->Grupos->find('list', ['valueField' => 'descripcion'])->toArray();
+        $usuariosList = $this->Servicios->CoUsers->find('list', [
+            'keyField' => 'co_user_id',
+            'valueField' => 'nombre'
+        ])->toArray();
 
-        $this->set(compact('servicios', 'agentes'));
+        $this->set(compact(
+            'servicios',
+            'agentes',
+            'statusList',
+            'prioridadesList',
+            'tiposList',
+            'coGroupsList',
+            'dependenciasList',
+            'direccionesList',
+            'gruposList',
+            'usuariosList'
+        ));
     }
 
     public function ajaxproceso()
